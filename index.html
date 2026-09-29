@@ -1,1 +1,69 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#171717"><meta name="apple-mobile-web-app-capable" content="yes"><title>VIDA — Projeto 28</title><link rel="manifest" href="/manifest.json"><link rel="icon" href="/icon.svg"><link rel="stylesheet" href="/styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script></head><body><div id="login" class="login"><div class="loginbox"><span class="badge">VIDA</span><h1>Projeto 28</h1><p>Conteúdo, acompanhamento e constância em um só lugar.</p><div class="field"><label>E-mail</label><input id="loginEmail" type="email" placeholder="voce@email.com"></div><div class="field"><label>Senha</label><input id="loginPass" type="password" placeholder="Sua senha"></div><button class="btn full" onclick="login()">ENTRAR</button><button class="btn outline full" style="margin-top:8px" onclick="signupTest()">CRIAR CONTA DE TESTE</button><p class="notice" style="margin-top:12px">Ambiente de homologação conectado ao Supabase.</p></div></div><div id="root" class="app hidden"><header class="top"><div><div class="logo">VIDA</div><div style="font-size:10px;color:#777">PROJETO 28</div></div><button class="avatar" onclick="go('profile')">V</button></header><main id="view"></main><nav class="nav"><button data-go="home" onclick="go('home')"><span class="ico">⌂</span>INÍCIO</button><button data-go="learn" onclick="go('learn')"><span class="ico">▤</span>APRENDER</button><button data-go="track" onclick="go('track')"><span class="ico">✓</span>ACOMPANHAR</button><button data-go="progress" onclick="go('progress')"><span class="ico">↗</span>PROGRESSO</button><button data-go="gym" onclick="go('gym')"><span class="ico">🏆</span>GYM RATS</button></nav></div><div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modalcard"><div class="modalbar"></div><div id="modalContent"></div></div></div><div id="toast" class="toast"></div><script>window.VIDA_LESSONS={};</script><script src="/week1.js"></script><script src="/week2.js"></script><script src="/week3.js"></script><script src="/week4.js"></script><script src="/meta.js"></script><script src="/app.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#171717">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="VIDA — Projeto 28: educação para emagrecimento, acompanhamento e constância.">
+  <title>VIDA — Projeto 28</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icon.svg">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+  <div id="globalLoading" class="global-loading hidden"><div class="spinner"></div><b>Carregando...</b></div>
+
+  <div id="login" class="login">
+    <div class="loginbox">
+      <span class="badge">VIDA</span>
+      <h1>Projeto 28</h1>
+      <p>Seu conteúdo, acompanhamento e constância em um só lugar.</p>
+      <div class="field"><label>E-mail</label><input id="loginEmail" type="email" autocomplete="email" placeholder="voce@email.com"></div>
+      <div class="field"><label>Senha</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
+      <button class="btn full" onclick="login()">ENTRAR</button>
+      <button class="text-button full" onclick="forgotPassword()">ESQUECI MINHA SENHA</button>
+      <p id="authMsg" class="notice auth-msg"></p>
+      <p class="login-help">Após a compra, use o acesso enviado para o mesmo e-mail informado no checkout.</p>
+    </div>
+  </div>
+
+  <div id="root" class="app hidden">
+    <header class="top">
+      <div>
+        <div class="logo">VIDA</div>
+        <div class="brand-sub">PROJETO 28</div>
+      </div>
+      <button class="avatar" onclick="go('profile')" aria-label="Abrir perfil">V</button>
+    </header>
+    <main id="view"></main>
+    <nav class="nav" aria-label="Navegação principal">
+      <button data-go="home" onclick="go('home')"><span class="ico">⌂</span>INÍCIO</button>
+      <button data-go="learn" onclick="go('learn')"><span class="ico">▤</span>APRENDER</button>
+      <button data-go="track" onclick="go('track')"><span class="ico">✓</span>ACOMPANHAR</button>
+      <button data-go="progress" onclick="go('progress')"><span class="ico">↗</span>PROGRESSO</button>
+      <button data-go="gym" onclick="go('gym')"><span class="ico">🏆</span>GYM RATS</button>
+    </nav>
+  </div>
+
+  <div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
+    <div class="modalcard">
+      <div class="modalbar"></div>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+  <div id="toast" class="toast"></div>
+
+  <script>window.VIDA_LESSONS={};</script>
+  <script src="/week1.js"></script>
+  <script src="/week2.js"></script>
+  <script src="/week3.js"></script>
+  <script src="/week4.js"></script>
+  <script src="/meta.js"></script>
+  <script src="/materials.js"></script>
+  <script src="/pdfs.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
