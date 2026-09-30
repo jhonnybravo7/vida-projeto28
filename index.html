@@ -8,11 +8,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Vida Nova — Projeto 28: educação para emagrecimento, acompanhamento e constância.">
   <title>Vida Nova — Projeto 28</title>
-  <link rel="manifest" href="/manifest.json">
-  <link rel="icon" href="/icon.svg">
-  <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/v3.css">
-  <link rel="stylesheet" href="/experience-v4.css">
+  <link rel="manifest" href="/manifest.json?v=8">
+  <link rel="icon" href="/icon.svg?v=8">
+  <link rel="stylesheet" href="/styles.css?v=8">
+  <link rel="stylesheet" href="/v3.css?v=8">
+  <link rel="stylesheet" href="/experience-v4.css?v=8">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 </head>
@@ -45,6 +45,17 @@
   <div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modalcard"><div class="modalbar"></div><div id="modalContent"></div></div></div>
   <div id="toast" class="toast"></div>
   <script>window.VIDA_LESSONS={};</script>
-  <script src="/week1.js"></script><script src="/week2.js"></script><script src="/week3.js"></script><script src="/week4.js"></script><script src="/meta.js"></script><script src="/content-v3.js"></script><script src="/guides-full.js"></script><script src="/app-v3.js"></script><script src="/ui-patch.js"></script><script src="/experience-v4.js"></script>
+  <script src="/week1.js?v=8"></script><script src="/week2.js?v=8"></script><script src="/week3.js?v=8"></script><script src="/week4.js?v=8"></script><script src="/meta.js?v=8"></script><script src="/content-v3.js?v=8"></script><script src="/guides-full.js?v=8"></script><script src="/app-v3.js?v=8"></script><script src="/ui-patch.js?v=8"></script><script src="/experience-v4.js?v=8"></script>
+  <script>
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/sw.js?v=8').then(r=>r.update()).catch(()=>{});
+      navigator.serviceWorker.addEventListener('controllerchange',()=>{
+        if(!sessionStorage.getItem('vida-nova-v8-reloaded')){
+          sessionStorage.setItem('vida-nova-v8-reloaded','1');
+          location.reload();
+        }
+      });
+    }
+  </script>
 </body>
 </html>
