@@ -21,19 +21,34 @@
     const email=document.querySelector('#su_email')?.value.trim();
     const password=document.querySelector('#su_pass')?.value||'';
     if(!name||!email||password.length<8)return toast('Preencha nome, e-mail e uma senha de pelo menos 8 caracteres.');
+
     loading(true,'Criando acesso...');
-    let r=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});
+    const r=await sb.auth.signUp({
+      email,
+      password,
+      options:{
+        data:{full_name:name},
+        emailRedirectTo:location.origin+'/'
+      }
+    });
+
     if(r.error && !/already|registered|exists/i.test(r.error.message||'')){
-      loading(false);return toast(r.error.message||'Não foi possível criar a conta.');
+      loading(false);
+      const msg=/database error|new user|saving new user|unexpected_failure/i.test(r.error.message||'')
+        ?'Não foi possível concluir o cadastro agora. Atualize a página e tente novamente.'
+        :(r.error.message||'Não foi possível criar a conta.');
+      return toast(msg);
     }
+
     const loginResult=await sb.auth.signInWithPassword({email,password});
     loading(false);
     if(loginResult.error){
       closeModal();
       const e=document.querySelector('#loginEmail'); if(e)e.value=email;
-      setAuth('Conta criada. Se o acesso ainda não estiver pré-aprovado, confira seu e-mail ou aguarde a liberação.');
+      setAuth('Conta criada. Se o acesso estiver pré-aprovado, tente entrar com a senha que acabou de definir.');
       return;
     }
+
     user=loginResult.data.user;
     closeModal();
     await route();
