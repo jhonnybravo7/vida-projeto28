@@ -6,12 +6,13 @@
   <meta name="theme-color" content="#171717">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="description" content="VIDA — Projeto 28: educação para emagrecimento, acompanhamento e constância.">
-  <title>VIDA — Projeto 28</title>
+  <meta name="description" content="Vida Nova — Projeto 28: educação para emagrecimento, acompanhamento e constância.">
+  <title>Vida Nova — Projeto 28</title>
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/icon.svg">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/v3.css">
+  <link rel="stylesheet" href="/experience-v4.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 </head>
@@ -19,7 +20,7 @@
   <div id="globalLoading" class="global-loading hidden"><div class="spinner"></div><b>Carregando...</b></div>
   <div id="login" class="login">
     <div class="loginbox">
-      <span class="badge">VIDA</span>
+      <span class="badge">VIDA NOVA</span>
       <h1>Projeto 28</h1>
       <p>Seu conteúdo, acompanhamento e constância em um só lugar.</p>
       <div class="field"><label>E-mail</label><input id="loginEmail" type="email" autocomplete="email" placeholder="voce@email.com"></div>
@@ -31,7 +32,7 @@
     </div>
   </div>
   <div id="root" class="app hidden">
-    <header class="top"><div><div class="logo">VIDA</div><div class="brand-sub">PROJETO 28</div></div><button class="avatar" onclick="go('profile')" aria-label="Abrir perfil">V</button></header>
+    <header class="top"><div><div class="logo">VIDA NOVA</div><div class="brand-sub">PROJETO 28</div></div><button class="avatar" onclick="go('profile')" aria-label="Abrir perfil">V</button></header>
     <main id="view"></main>
     <nav class="nav" aria-label="Navegação principal">
       <button data-go="home" onclick="go('home')"><span class="ico">⌂</span>INÍCIO</button>
@@ -44,6 +45,6 @@
   <div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modalcard"><div class="modalbar"></div><div id="modalContent"></div></div></div>
   <div id="toast" class="toast"></div>
   <script>window.VIDA_LESSONS={};</script>
-  <script src="/week1.js"></script><script src="/week2.js"></script><script src="/week3.js"></script><script src="/week4.js"></script><script src="/meta.js"></script><script src="/content-v3.js"></script><script src="/guides-full.js"></script><script src="/app-v3.js"></script><script src="/ui-patch.js"></script>
+  <script src="/week1.js"></script><script src="/week2.js"></script><script src="/week3.js"></script><script src="/week4.js"></script><script src="/meta.js"></script><script src="/content-v3.js"></script><script src="/guides-full.js"></script><script src="/app-v3.js"></script><script src="/ui-patch.js"></script><script src="/experience-v4.js"></script>
 </body>
 </html>
