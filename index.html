@@ -11,11 +11,12 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/icon.svg">
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/v3.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
   <div id="globalLoading" class="global-loading hidden"><div class="spinner"></div><b>Carregando...</b></div>
-
   <div id="login" class="login">
     <div class="loginbox">
       <span class="badge">VIDA</span>
@@ -29,15 +30,8 @@
       <p class="login-help">Após a compra, use o acesso enviado para o mesmo e-mail informado no checkout.</p>
     </div>
   </div>
-
   <div id="root" class="app hidden">
-    <header class="top">
-      <div>
-        <div class="logo">VIDA</div>
-        <div class="brand-sub">PROJETO 28</div>
-      </div>
-      <button class="avatar" onclick="go('profile')" aria-label="Abrir perfil">V</button>
-    </header>
+    <header class="top"><div><div class="logo">VIDA</div><div class="brand-sub">PROJETO 28</div></div><button class="avatar" onclick="go('profile')" aria-label="Abrir perfil">V</button></header>
     <main id="view"></main>
     <nav class="nav" aria-label="Navegação principal">
       <button data-go="home" onclick="go('home')"><span class="ico">⌂</span>INÍCIO</button>
@@ -47,23 +41,9 @@
       <button data-go="gym" onclick="go('gym')"><span class="ico">🏆</span>GYM RATS</button>
     </nav>
   </div>
-
-  <div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
-    <div class="modalcard">
-      <div class="modalbar"></div>
-      <div id="modalContent"></div>
-    </div>
-  </div>
+  <div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modalcard"><div class="modalbar"></div><div id="modalContent"></div></div></div>
   <div id="toast" class="toast"></div>
-
   <script>window.VIDA_LESSONS={};</script>
-  <script src="/week1.js"></script>
-  <script src="/week2.js"></script>
-  <script src="/week3.js"></script>
-  <script src="/week4.js"></script>
-  <script src="/meta.js"></script>
-  <script src="/materials.js"></script>
-  <script src="/pdfs.js"></script>
-  <script src="/app.js"></script>
+  <script src="/week1.js"></script><script src="/week2.js"></script><script src="/week3.js"></script><script src="/week4.js"></script><script src="/meta.js"></script><script src="/content-v3.js"></script><script src="/app-v3.js"></script>
 </body>
 </html>
