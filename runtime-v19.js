@@ -60,6 +60,8 @@
     lessons[i]=Array.isArray(p.lessons)?p.lessons:[];
     guides[i]=p.guide||{};
     materials[i]=Array.isArray(p.materials)?p.materials:[];
+    if(p.training)window.VIDA_TRAINING[i]=p.training;
+    if(p.references&&typeof p.references==='object')Object.assign(window.VIDA_REFERENCES,p.references);
     V19.weeksLoaded[i]=true;
     return true;
   };
