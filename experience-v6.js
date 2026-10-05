@@ -6,91 +6,7 @@
     3:{icon:'03',eyebrow:'SEMANA 3',title:'Como se movimentar',subtitle:'Força, cardio e movimento cotidiano trabalhando juntos.'},
     4:{icon:'04',eyebrow:'SEMANA 4',title:'Como continuar',subtitle:'Construa uma versão da rotina que sobreviva aos dias imperfeitos.'}
   };
-  const TRAINING={
-    1:{
-      level:'COMEÇAR / VOLTAR',title:'Treino base da primeira semana',summary:'Duas rotinas simples para voltar a treinar sem precisar começar no máximo.',
-      blocks:[
-        {name:'SUPERIORES',items:[
-          ['Puxada frontal aberta','2–3 × 10–12','Se o ombro incomodar, use pegada neutra ou mais fechada e amplitude confortável.'],
-          ['Desenvolvimento máquina','2–3 × 10–12','Se houver desconforto no ombro, reduza amplitude/carga ou troque por elevação lateral leve se tolerada.'],
-          ['Tríceps na polia com corda','2–3 × 10–12','Mantenha cotovelos estáveis; reduza carga se perder controle.'],
-          ['Rosca direta','2–3 × 10–12','Pode ser feita na polia, máquina ou com halteres leves.'],
-          ['Cardio','15–30 min','Para reduzir impacto: bicicleta, elíptico ou caminhada sem corrida.']
-        ]},
-        {name:'INFERIORES',items:[
-          ['Leg press','2–3 × 10–12','Use amplitude confortável. Se o joelho incomodar, reduza amplitude e carga.'],
-          ['Cadeira flexora','2–3 × 10–12','Movimento lento e controlado; não precisa buscar carga máxima.'],
-          ['Elevação pélvica','2–3 × 10–12','Pode ser no solo, banco ou máquina, conforme conforto.'],
-          ['Cadeira adutora','2–3 × 10–15','Amplitude confortável, sem forçar abertura ou fechamento.'],
-          ['Cadeira abdutora','2–3 × 10–15','Controle o retorno e evite embalo.'],
-          ['Panturrilhas','2–3 × 12–15','Em pé, sentado ou no leg press, conforme disponibilidade.'],
-          ['Cardio','15–30 min','Baixo impacto: bicicleta ou elíptico. Caminhada também funciona.']
-        ]}
-      ],
-      note:'Exemplo educacional para iniciar/retomar. Ajuste carga, amplitude e equipamento ao seu nível. Dor aguda, tontura, falta de ar incomum ou limitação importante pedem avaliação profissional.'
-    },
-    2:{level:'GANHAR RITMO',title:'Base da semana 2',summary:'Mesma lógica da primeira semana, agora com mais consistência antes de buscar intensidade.',blocks:[
-      {name:'SUPERIORES',items:[
-        ['Puxada frontal aberta','3 × 10–12','Pegada confortável e movimento controlado.'],
-        ['Remada sentada','3 × 10–12','Evite compensar com a lombar.'],
-        ['Desenvolvimento máquina','3 × 10–12','Mantenha amplitude tolerada.'],
-        ['Tríceps na polia com corda','3 × 10–12','Controle a volta do movimento.'],
-        ['Rosca direta','3 × 10–12','Carga que permita técnica limpa.'],
-        ['Cardio','20–30 min','Bike, elíptico ou caminhada para menor impacto.']
-      ]},
-      {name:'INFERIORES',items:[
-        ['Leg press','3 × 10–12','Amplitude confortável e sem perder controle.'],
-        ['Cadeira flexora','3 × 10–12','Sem aceleração na volta.'],
-        ['Elevação pélvica','3 × 10–12','Pausa curta no topo se confortável.'],
-        ['Cadeira adutora','3 × 12–15','Movimento controlado.'],
-        ['Cadeira abdutora','3 × 12–15','Evite embalo.'],
-        ['Panturrilhas','3 × 12–15','Amplitude confortável.'],
-        ['Cardio','20–30 min','Ritmo moderado, sem necessidade de máximo esforço.']
-      ]}
-    ],note:'Aumente uma variável de cada vez e preserve a técnica.'},
-    3:{level:'CONSOLIDAR',title:'Base da semana 3',summary:'Força e cardio organizados com progressão sem transformar todos os dias em dias pesados.',blocks:[
-      {name:'SUPERIORES',items:[
-        ['Puxada frontal aberta','3 × 8–12','Use a carga apenas se a técnica continuar estável.'],
-        ['Remada sentada','3 × 8–12','Tronco estável.'],
-        ['Desenvolvimento máquina','3 × 8–12','Reduza carga/amplitude se necessário.'],
-        ['Tríceps na polia com corda','3 × 10–12','Controle na ida e na volta.'],
-        ['Rosca direta','3 × 10–12','Sem usar balanço do corpo.'],
-        ['Cardio','25–35 min','Baixo impacto: bike ou elíptico.']
-      ]},
-      {name:'INFERIORES',items:[
-        ['Leg press','3 × 8–12','Evolua carga apenas mantendo amplitude e controle.'],
-        ['Cadeira flexora','3 × 10–12','Movimento estável.'],
-        ['Elevação pélvica','3 × 8–12','Use variação que você domina.'],
-        ['Cadeira adutora','3 × 12–15','Sem forçar amplitude.'],
-        ['Cadeira abdutora','3 × 12–15','Controle o retorno.'],
-        ['Panturrilhas','3 × 12–15','Pausa curta no topo se confortável.'],
-        ['Cardio','25–35 min','Ritmo moderado; reduza se recuperação estiver pior.']
-      ]}
-    ],note:'Se sono, disposição ou recuperação piorarem, reduza primeiro volume ou intensidade.'},
-    4:{level:'CONTINUIDADE',title:'Base da semana 4',summary:'Saia dos 28 dias com um treino que sobreviva à rotina.',blocks:[
-      {name:'TREINO COMPLETO — SUPERIORES',items:[
-        ['Puxada frontal aberta','3 × 8–12','Pegada confortável.'],
-        ['Remada sentada','3 × 8–12','Tronco estável.'],
-        ['Desenvolvimento máquina','3 × 8–12','Amplitude tolerada.'],
-        ['Tríceps na polia com corda','3 × 10–12','Movimento controlado.'],
-        ['Rosca direta','3 × 10–12','Sem balanço.'],
-        ['Cardio','25–35 min','Bike, elíptico ou caminhada.']
-      ]},
-      {name:'TREINO COMPLETO — INFERIORES',items:[
-        ['Leg press','3 × 8–12','Controle e amplitude confortável.'],
-        ['Cadeira flexora','3 × 10–12','Movimento estável.'],
-        ['Elevação pélvica','3 × 8–12','Variação dominada.'],
-        ['Cadeira adutora','3 × 12–15','Sem forçar amplitude.'],
-        ['Cadeira abdutora','3 × 12–15','Controle o retorno.'],
-        ['Panturrilhas','3 × 12–15','Amplitude confortável.'],
-        ['Cardio','25–35 min','Ritmo sustentável.']
-      ]},
-      {name:'VERSÃO CURTA',items:[
-        ['Quando o dia apertar','Leg press + puxada + desenvolvimento + flexora','2 séries de cada, com técnica limpa.'],
-        ['Se quiser reduzir impacto','Bike + máquinas','Evite saltos/corrida se impacto não estiver confortável.']
-      ]}
-    ],note:'Plano reduzido não é fracasso; é ferramenta de continuidade.'}
-  };
+  const TRAINING=window.VIDA_TRAINING||{};
 
   // THEME
   const root=document.documentElement;
@@ -141,6 +57,7 @@
   function lessonDone(i,j){return S.progress.some(p=>p.content_slug===`lesson-${i}-${j}`)}
   function workoutHTML(i){
     const w=TRAINING[i];
+    if(!w)return '<section class="training-v6"><div class="training-note">Carregando treino da semana...</div></section>';
     return `<section class="training-v6"><div class="training-heading"><span>${w.level}</span><h3>${w.title}</h3><p>${w.summary}</p></div>${w.blocks.map(bl=>`<div class="training-block"><div class="training-block-title">${bl.name}</div>${bl.items.map((x,n)=>`<div class="training-exercise"><div class="training-check">${n+1}</div><div><b>${x[0]}</b><span>${x[1]}</span><small>${x[2]}</small></div></div>`).join('')}</div>`).join('')}<div class="training-note">${w.note}</div></section>`
   }
   window.openWeek=function(i){
@@ -162,14 +79,7 @@
   window.openLesson=function(i,j){parentWeek=i;baseLesson(i,j);requestAnimationFrame(()=>detailBack(i))};
   const baseGuide=window.openGuide;
   window.openGuide=function(i){parentWeek=i;baseGuide(i);requestAnimationFrame(()=>{detailBack(i);const b=document.querySelector('#modalContent .guide-reader .btn');if(b)b.textContent='↓ BAIXAR CONHECIMENTOS DA SEMANA'})};
-  const STATIC_GUIDES_V7={
-    'Guia rápido de proteínas':{icon:'P',title:'Proteínas no dia a dia',subtitle:'Referência visual para reconhecer fontes comuns.',cards:[['Animais','Ovos · frango · carnes · peixes · leite · iogurte · queijos'],['Vegetais','Soja · tofu · feijões · lentilha · grão-de-bico'],['Na prática','Identifique onde está a proteína da refeição. Não existe uma fonte obrigatória.']],tip:'A quantidade ideal é individual. Aqui o objetivo é reconhecer fontes.'},
-    'Guia rápido de carboidratos':{icon:'C',title:'Carboidratos no dia a dia',subtitle:'Energia também faz parte de uma alimentação organizada.',cards:[['Grãos e massas','Arroz · aveia · pães · massas · milho'],['Raízes e tubérculos','Batata · mandioca · mandioquinha · inhame'],['Frutas','Também fornecem carboidrato, água, fibras e micronutrientes'],['Na prática','Ter carboidrato não torna uma refeição automaticamente ruim.']],tip:'Reconhecer não significa eliminar. Observe a refeição inteira e o contexto.'},
-    'Guia rápido de gorduras':{icon:'G',title:'Gorduras no dia a dia',subtitle:'Nutrientes importantes que aparecem em diferentes alimentos.',cards:[['Fontes comuns','Azeite · castanhas · sementes · abacate'],['Também aparecem em','Ovos · laticínios · carnes · preparações'],['Energia','Pequenas porções podem representar bastante energia.']],tip:'O objetivo é reconhecer presença e porção, não demonizar o nutriente.'},
-    'Guia de fibras':{icon:'F',title:'Fibras no dia a dia',subtitle:'Variedade costuma ser mais útil do que procurar um único alimento perfeito.',cards:[['Leguminosas','Feijão · lentilha · grão-de-bico'],['Vegetais','Folhas · legumes · verduras'],['Frutas e cereais','Frutas · aveia · grãos integrais · sementes'],['Na prática','Observe se alimentos vegetais variados aparecem ao longo do dia.']],tip:'Aumentos grandes de fibra podem exigir adaptação. Observe sua tolerância.'},
-    'Guia de bebidas e chás':{icon:'B',title:'Bebidas e chás',subtitle:'Hidratação não depende de uma bebida “detox”.',cards:[['Água','É a referência mais simples para hidratação cotidiana.'],['Café e chás','Podem fazer parte da rotina considerando tolerância e horário.'],['Atenção','Chás não queimam gordura nem substituem alimentação, sono ou movimento.']],tip:'Necessidades de líquidos variam e devem respeitar individualidade e orientação profissional.'},
-    'Comer fora sem transformar em fracasso':{icon:'↗',title:'Comer fora faz parte',subtitle:'Uma refeição diferente não precisa virar um dia perdido.',cards:[['Antes','Evite chegar tratando a refeição como “última chance”.'],['Durante','Escolha o que realmente quer e coma com atenção.'],['Depois','Volte ao padrão normal na próxima oportunidade, sem compensação extrema.']],tip:'Constância é reduzir o tempo entre sair do plano e voltar.'}
-  };
+  const STATIC_GUIDES_V7=window.VIDA_REFERENCES||{};
   function renderStaticGuideV7(i,d){
     const c=document.querySelector('#modalContent');if(!c)return;
     const cards=d.cards.map(x=>'<div><b>'+esc(x[0])+'</b><p>'+esc(x[1])+'</p></div>').join('');
