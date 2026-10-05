@@ -162,8 +162,29 @@
   window.openLesson=function(i,j){parentWeek=i;baseLesson(i,j);requestAnimationFrame(()=>detailBack(i))};
   const baseGuide=window.openGuide;
   window.openGuide=function(i){parentWeek=i;baseGuide(i);requestAnimationFrame(()=>{detailBack(i);const b=document.querySelector('#modalContent .guide-reader .btn');if(b)b.textContent='↓ BAIXAR CONHECIMENTOS DA SEMANA'})};
+  const STATIC_GUIDES_V7={
+    'Guia rápido de proteínas':{icon:'P',title:'Proteínas no dia a dia',subtitle:'Referência visual para reconhecer fontes comuns.',cards:[['Animais','Ovos · frango · carnes · peixes · leite · iogurte · queijos'],['Vegetais','Soja · tofu · feijões · lentilha · grão-de-bico'],['Na prática','Identifique onde está a proteína da refeição. Não existe uma fonte obrigatória.']],tip:'A quantidade ideal é individual. Aqui o objetivo é reconhecer fontes.'},
+    'Guia rápido de carboidratos':{icon:'C',title:'Carboidratos no dia a dia',subtitle:'Energia também faz parte de uma alimentação organizada.',cards:[['Grãos e massas','Arroz · aveia · pães · massas · milho'],['Raízes e tubérculos','Batata · mandioca · mandioquinha · inhame'],['Frutas','Também fornecem carboidrato, água, fibras e micronutrientes'],['Na prática','Ter carboidrato não torna uma refeição automaticamente ruim.']],tip:'Reconhecer não significa eliminar. Observe a refeição inteira e o contexto.'},
+    'Guia rápido de gorduras':{icon:'G',title:'Gorduras no dia a dia',subtitle:'Nutrientes importantes que aparecem em diferentes alimentos.',cards:[['Fontes comuns','Azeite · castanhas · sementes · abacate'],['Também aparecem em','Ovos · laticínios · carnes · preparações'],['Energia','Pequenas porções podem representar bastante energia.']],tip:'O objetivo é reconhecer presença e porção, não demonizar o nutriente.'},
+    'Guia de fibras':{icon:'F',title:'Fibras no dia a dia',subtitle:'Variedade costuma ser mais útil do que procurar um único alimento perfeito.',cards:[['Leguminosas','Feijão · lentilha · grão-de-bico'],['Vegetais','Folhas · legumes · verduras'],['Frutas e cereais','Frutas · aveia · grãos integrais · sementes'],['Na prática','Observe se alimentos vegetais variados aparecem ao longo do dia.']],tip:'Aumentos grandes de fibra podem exigir adaptação. Observe sua tolerância.'},
+    'Guia de bebidas e chás':{icon:'B',title:'Bebidas e chás',subtitle:'Hidratação não depende de uma bebida “detox”.',cards:[['Água','É a referência mais simples para hidratação cotidiana.'],['Café e chás','Podem fazer parte da rotina considerando tolerância e horário.'],['Atenção','Chás não queimam gordura nem substituem alimentação, sono ou movimento.']],tip:'Necessidades de líquidos variam e devem respeitar individualidade e orientação profissional.'},
+    'Comer fora sem transformar em fracasso':{icon:'↗',title:'Comer fora faz parte',subtitle:'Uma refeição diferente não precisa virar um dia perdido.',cards:[['Antes','Evite chegar tratando a refeição como “última chance”.'],['Durante','Escolha o que realmente quer e coma com atenção.'],['Depois','Volte ao padrão normal na próxima oportunidade, sem compensação extrema.']],tip:'Constância é reduzir o tempo entre sair do plano e voltar.'}
+  };
+  function renderStaticGuideV7(i,d){
+    const c=document.querySelector('#modalContent');if(!c)return;
+    const cards=d.cards.map(x=>'<div><b>'+esc(x[0])+'</b><p>'+esc(x[1])+'</p></div>').join('');
+    c.innerHTML='<button class="detail-back" onclick="returnToWeek('+i+')">← Semana '+i+'</button><div class="reference-sheet-v7"><div class="reference-hero-v7"><span>'+esc(d.icon)+'</span><div><small>GUIA RÁPIDO · SEMANA '+i+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(d.subtitle)+'</p></div></div><div class="reference-cards-v7">'+cards+'</div><div class="reference-tip-v7"><b>LEMBRETE</b><p>'+esc(d.tip)+'</p></div></div>';
+  }
   const baseMaterial=window.openMaterial;
-  window.openMaterial=async function(i,j){parentWeek=i;await baseMaterial(i,j);requestAnimationFrame(()=>{detailBack(i);enhanceMaterialControls()})};
+  window.openMaterial=async function(i,j){
+    parentWeek=i;
+    await baseMaterial(i,j);
+    requestAnimationFrame(()=>{
+      detailBack(i);
+      const d=STATIC_GUIDES_V7[materials[i]?.[j]?.title];
+      if(d)renderStaticGuideV7(i,d); else enhanceMaterialControls();
+    });
+  };
 
   // More mobile-friendly material controls.
   const oldEditable=window.editableTable;
