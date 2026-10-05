@@ -39,7 +39,7 @@
     const {data,error}=await sb.rpc('get_app_bootstrap');
     if(error)throw error;
     applyBootstrap(data||{});
-    if(base())await loadIndex();
+    if(base()&&!(await loadIndex()))throw new Error('program_index_failed');
   };
 
   window.ensureProgramWeekV19=async function(i){
@@ -168,12 +168,11 @@
 
   window.completeLesson=async function(i,j){
     loading(true,'Salvando progresso...');
-    const now=new Date().toISOString(),slug='lesson-'+i+'-'+j;
-    const {error}=await sb.from('content_progress').upsert({user_id:user.id,content_slug:slug,status:'completed',completed_at:now},{onConflict:'user_id,content_slug'});
+    const {data,error}=await sb.rpc('complete_program_lesson',{p_week:Number(i),p_lesson:Number(j)});
     loading(false);
     if(error)return toast('Não foi possível salvar');
-    const ix=S.progress.findIndex(x=>x.content_slug===slug);
-    const row={user_id:user.id,content_slug:slug,status:'completed',completed_at:now};
+    const row=data||{content_slug:'lesson-'+i+'-'+j,status:'completed',completed_at:new Date().toISOString()};
+    const ix=S.progress.findIndex(x=>x.content_slug===row.content_slug);
     if(ix>=0)S.progress[ix]={...S.progress[ix],...row};else S.progress.push(row);
     await window.openWeek(i);
     toast('Conteúdo concluído');
