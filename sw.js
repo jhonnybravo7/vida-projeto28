@@ -1,10 +1,10 @@
 const CACHE='vida-nova-shell-v22';
 const CORE=[
   '/',
-  '/vida-v21.css',
-  '/vida-v21.js',
-  '/manifest.json?v=21',
-  '/icon.svg?v=21'
+  '/vida-v21.css',\n  '/admin-v22.css?v=22',
+  '/vida-v21.js',\n  '/admin-v22.js?v=22',
+  '/manifest.json?v=22',
+  '/icon.svg?v=22'
 ];
 
 self.addEventListener('install',event=>{
