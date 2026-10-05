@@ -37,30 +37,32 @@
   // THEME
   const root=document.documentElement;
   function resolvedTheme(mode){return mode==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):mode}
-  function applyTheme(mode=localStorage.getItem('vida_theme')||'system'){
+  function applyTheme(mode=localStorage.getItem('vida_theme')||'light'){
     localStorage.setItem('vida_theme',mode);
     root.dataset.theme=resolvedTheme(mode);
     root.dataset.themeMode=mode;
     const meta=document.querySelector('meta[name="theme-color"]');
     if(meta)meta.content=root.dataset.theme==='dark'?'#0d100e':'#f6f7f4';
     document.querySelectorAll('[data-theme-choice]').forEach(b=>b.classList.toggle('active',b.dataset.themeChoice===mode));
-    const quick=document.querySelector('.theme-quick');
-    if(quick)quick.textContent=root.dataset.theme==='dark'?'☀︎':'◐';
   }
   window.setVidaTheme=applyTheme;
   window.cycleVidaTheme=()=>{
-    const mode=localStorage.getItem('vida_theme')||'system';
+    const mode=localStorage.getItem('vida_theme')||'light';
     applyTheme(mode==='system'?'dark':mode==='dark'?'light':'system');
   };
   applyTheme();
-  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if((localStorage.getItem('vida_theme')||'system')==='system')applyTheme('system')});
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if((localStorage.getItem('vida_theme')||'light')==='system')applyTheme('system')});
 
   function decorateHeader(){
-    const top=document.querySelector('.top'); if(!top||top.querySelector('.theme-quick'))return;
-    const avatar=top.querySelector('.avatar'); if(!avatar)return;
-    const wrap=document.createElement('div'); wrap.className='top-actions';
-    const b=document.createElement('button'); b.className='theme-quick'; b.type='button'; b.setAttribute('aria-label','Alternar aparência'); b.onclick=cycleVidaTheme;
-    avatar.parentNode.insertBefore(wrap,avatar);wrap.appendChild(b);wrap.appendChild(avatar);applyTheme(localStorage.getItem('vida_theme')||'system');
+    const top=document.querySelector('.top'); if(!top)return;
+    const quick=top.querySelector('.theme-quick');
+    if(quick)quick.remove();
+    const actions=top.querySelector('.top-actions');
+    if(actions){
+      const avatar=actions.querySelector('.avatar');
+      if(avatar)top.appendChild(avatar);
+      actions.remove();
+    }
   }
 
   // MODAL NAVIGATION: details return to the active week instead of the 4-week list.
@@ -174,7 +176,7 @@
   function enhanceProfile(){
     const screen=document.querySelector('#view .screen');if(!screen||screen.querySelector('.appearance-v6'))return;
     const firstCard=screen.querySelector('.card.top-gap');if(!firstCard)return;
-    firstCard.insertAdjacentHTML('afterend',`<div class="card top-gap appearance-v6"><div><span class="badge">APARÊNCIA</span><h3>Tema do aplicativo</h3><p>Escolha claro, escuro ou acompanhe o aparelho.</p></div><div class="theme-segment-v6"><button data-theme-choice="light" onclick="setVidaTheme('light')">☀ Claro</button><button data-theme-choice="dark" onclick="setVidaTheme('dark')">● Escuro</button><button data-theme-choice="system" onclick="setVidaTheme('system')">◐ Aparelho</button></div></div>`);applyTheme(localStorage.getItem('vida_theme')||'system');
+    firstCard.insertAdjacentHTML('afterend',`<div class="card top-gap appearance-v6"><div><span class="badge">APARÊNCIA</span><h3>Tema do aplicativo</h3><p>Escolha claro, escuro ou acompanhe o aparelho.</p></div><div class="theme-segment-v6"><button data-theme-choice="light" onclick="setVidaTheme('light')">☀ Claro</button><button data-theme-choice="dark" onclick="setVidaTheme('dark')">● Escuro</button><button data-theme-choice="system" onclick="setVidaTheme('system')">◐ Aparelho</button></div></div>`);applyTheme(localStorage.getItem('vida_theme')||'light');
   }
   const priorGo=window.go;
   window.go=function(s){priorGo(s);requestAnimationFrame(()=>{decorateHeader();if(s==='profile')enhanceProfile();if(s==='track'){};})};
