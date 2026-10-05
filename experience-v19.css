@@ -1,0 +1,12 @@
+/* Vida Nova v19 — mobile interaction polish */
+button,a,[role="button"]{touch-action:manipulation}
+html{-webkit-text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent}
+@media(max-width:520px){
+  input,select,textarea{font-size:16px!important}
+  .modalcard{-webkit-overflow-scrolling:touch}
+  .screen{contain:layout style}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
