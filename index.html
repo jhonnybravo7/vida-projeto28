@@ -8,9 +8,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Vida Nova — Projeto 28: educação para emagrecimento, acompanhamento e constância.">
   <title>Vida Nova — Projeto 28</title>
-  <link rel="manifest" href="/manifest.json?v=20">
-  <link rel="icon" href="/icon.svg?v=20">
-  <link rel="stylesheet" href="/vida-v20.css">
+  <link rel="manifest" href="/manifest.json?v=21">
+  <link rel="icon" href="/icon.svg?v=21">
+  <link rel="stylesheet" href="/vida-v21.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
   <script>
     window.__VIDA_BOOT_STARTED=Date.now();
@@ -19,6 +19,8 @@
     window.VIDA_WEEK_META={};
     window.VIDA_GUIDES={};
     window.VIDA_MATERIALS={};
+    window.VIDA_TRAINING={};
+    window.VIDA_REFERENCES={};
     window.addEventListener('error',e=>{window.__VIDA_BOOT_ERROR=String(e.message||'Erro de carregamento')});
     window.addEventListener('unhandledrejection',e=>{window.__VIDA_BOOT_ERROR=String(e.reason?.message||e.reason||'Erro de inicialização')});
   </script>
@@ -51,7 +53,7 @@
   </div>
   <div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modalcard"><div class="modalbar"></div><div id="modalContent"></div></div></div>
   <div id="toast" class="toast"></div>
-  <script src="/vida-v20.js"></script>
+  <script src="/vida-v21.js"></script>
   <script>
     window.startVidaApp?.().catch(()=>{
       const login=document.getElementById('login'),root=document.getElementById('root'),m=document.getElementById('authMsg');
