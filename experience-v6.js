@@ -29,9 +29,67 @@
       ],
       note:'Exemplo educacional para iniciar/retomar. Ajuste carga, amplitude e equipamento ao seu nível. Dor aguda, tontura, falta de ar incomum ou limitação importante pedem avaliação profissional.'
     },
-    2:{level:'GANHAR RITMO',title:'Consistência antes de intensidade',summary:'Aumente frequência e qualidade sem transformar toda sessão em treino máximo.',blocks:[{name:'SUGESTÃO DA SEMANA',items:[['Força','3 sessões','Priorize movimentos que você executa bem.'],['Cardio','1–2 sessões de 20–35 min','Bike, elíptico ou caminhada se quiser reduzir impacto.'],['Movimento leve','Dias sem treino','Caminhada e tarefas do dia também contam.']]}],note:'Evolua uma variável de cada vez: frequência, duração, carga, repetições ou ritmo.'},
-    3:{level:'CONSOLIDAR',title:'Força + cardio organizados',summary:'Distribua estímulos para treinar e ainda conseguir recuperar.',blocks:[{name:'SUGESTÃO DA SEMANA',items:[['Treino A','Pernas + empurrar','Ex.: leg press, flexora, supino, desenvolvimento e core.'],['Treino B','Pernas + puxar','Ex.: agachamento assistido, remada, puxada, glúteos e core.'],['Treino C','Corpo todo','4–6 movimentos que você já domina.'],['Cardio moderado','25–40 min','Baixo impacto: bike ou elíptico.']]}],note:'Se sono, disposição ou recuperação piorarem, reduza primeiro volume ou intensidade.'},
-    4:{level:'CONTINUIDADE',title:'Seu treino que sobrevive à rotina',summary:'Tenha uma versão ideal e uma versão mínima para não desaparecer.',blocks:[{name:'PLANOS',items:[['Plano A','3 treinos + 2 cardios/movimentos','Use em semanas normais.'],['Plano B','2 treinos de corpo todo + caminhadas','Use em semanas corridas.'],['Plano C','1 treino curto + 2 caminhadas de 20 min','Seu mínimo viável.'],['Versão sem impacto','Bike + máquinas','Evite corrida e saltos se impacto não estiver confortável.']]}],note:'Plano B não é fracasso. É uma ferramenta para reduzir o tempo entre sair da rotina e voltar.'}
+    2:{level:'GANHAR RITMO',title:'Base da semana 2',summary:'Mesma lógica da primeira semana, agora com mais consistência antes de buscar intensidade.',blocks:[
+      {name:'SUPERIORES',items:[
+        ['Puxada frontal aberta','3 × 10–12','Pegada confortável e movimento controlado.'],
+        ['Remada sentada','3 × 10–12','Evite compensar com a lombar.'],
+        ['Desenvolvimento máquina','3 × 10–12','Mantenha amplitude tolerada.'],
+        ['Tríceps na polia com corda','3 × 10–12','Controle a volta do movimento.'],
+        ['Rosca direta','3 × 10–12','Carga que permita técnica limpa.'],
+        ['Cardio','20–30 min','Bike, elíptico ou caminhada para menor impacto.']
+      ]},
+      {name:'INFERIORES',items:[
+        ['Leg press','3 × 10–12','Amplitude confortável e sem perder controle.'],
+        ['Cadeira flexora','3 × 10–12','Sem aceleração na volta.'],
+        ['Elevação pélvica','3 × 10–12','Pausa curta no topo se confortável.'],
+        ['Cadeira adutora','3 × 12–15','Movimento controlado.'],
+        ['Cadeira abdutora','3 × 12–15','Evite embalo.'],
+        ['Panturrilhas','3 × 12–15','Amplitude confortável.'],
+        ['Cardio','20–30 min','Ritmo moderado, sem necessidade de máximo esforço.']
+      ]}
+    ],note:'Aumente uma variável de cada vez e preserve a técnica.'},
+    3:{level:'CONSOLIDAR',title:'Base da semana 3',summary:'Força e cardio organizados com progressão sem transformar todos os dias em dias pesados.',blocks:[
+      {name:'SUPERIORES',items:[
+        ['Puxada frontal aberta','3 × 8–12','Use a carga apenas se a técnica continuar estável.'],
+        ['Remada sentada','3 × 8–12','Tronco estável.'],
+        ['Desenvolvimento máquina','3 × 8–12','Reduza carga/amplitude se necessário.'],
+        ['Tríceps na polia com corda','3 × 10–12','Controle na ida e na volta.'],
+        ['Rosca direta','3 × 10–12','Sem usar balanço do corpo.'],
+        ['Cardio','25–35 min','Baixo impacto: bike ou elíptico.']
+      ]},
+      {name:'INFERIORES',items:[
+        ['Leg press','3 × 8–12','Evolua carga apenas mantendo amplitude e controle.'],
+        ['Cadeira flexora','3 × 10–12','Movimento estável.'],
+        ['Elevação pélvica','3 × 8–12','Use variação que você domina.'],
+        ['Cadeira adutora','3 × 12–15','Sem forçar amplitude.'],
+        ['Cadeira abdutora','3 × 12–15','Controle o retorno.'],
+        ['Panturrilhas','3 × 12–15','Pausa curta no topo se confortável.'],
+        ['Cardio','25–35 min','Ritmo moderado; reduza se recuperação estiver pior.']
+      ]}
+    ],note:'Se sono, disposição ou recuperação piorarem, reduza primeiro volume ou intensidade.'},
+    4:{level:'CONTINUIDADE',title:'Base da semana 4',summary:'Saia dos 28 dias com um treino que sobreviva à rotina.',blocks:[
+      {name:'TREINO COMPLETO — SUPERIORES',items:[
+        ['Puxada frontal aberta','3 × 8–12','Pegada confortável.'],
+        ['Remada sentada','3 × 8–12','Tronco estável.'],
+        ['Desenvolvimento máquina','3 × 8–12','Amplitude tolerada.'],
+        ['Tríceps na polia com corda','3 × 10–12','Movimento controlado.'],
+        ['Rosca direta','3 × 10–12','Sem balanço.'],
+        ['Cardio','25–35 min','Bike, elíptico ou caminhada.']
+      ]},
+      {name:'TREINO COMPLETO — INFERIORES',items:[
+        ['Leg press','3 × 8–12','Controle e amplitude confortável.'],
+        ['Cadeira flexora','3 × 10–12','Movimento estável.'],
+        ['Elevação pélvica','3 × 8–12','Variação dominada.'],
+        ['Cadeira adutora','3 × 12–15','Sem forçar amplitude.'],
+        ['Cadeira abdutora','3 × 12–15','Controle o retorno.'],
+        ['Panturrilhas','3 × 12–15','Amplitude confortável.'],
+        ['Cardio','25–35 min','Ritmo sustentável.']
+      ]},
+      {name:'VERSÃO CURTA',items:[
+        ['Quando o dia apertar','Leg press + puxada + desenvolvimento + flexora','2 séries de cada, com técnica limpa.'],
+        ['Se quiser reduzir impacto','Bike + máquinas','Evite saltos/corrida se impacto não estiver confortável.']
+      ]}
+    ],note:'Plano reduzido não é fracasso; é ferramenta de continuidade.'}
   };
 
   // THEME
