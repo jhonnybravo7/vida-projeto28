@@ -1,19 +1,8 @@
-const CACHE='vida-nova-shell-v20';
+const CACHE='vida-nova-shell-v21';
 const CORE=[
   '/',
-  '/styles.css?v=20',
-  '/v3.css?v=20',
-  '/experience-v4.css?v=20',
-  '/experience-v6.css?v=20',
-  '/experience-v8.css?v=20',
-  '/experience-v19.css?v=20',
-  '/app-v3.js?v=20',
-  '/ui-patch.js?v=20',
-  '/experience-v5.js?v=20',
-  '/experience-v6.js?v=20',
-  '/experience-v6-water.js?v=20',
-  '/experience-v8.js?v=20',
-  '/runtime-v19.js?v=20',
+  '/vida-v20.css',
+  '/vida-v20.js',
   '/manifest.json?v=20',
   '/icon.svg?v=20'
 ];
