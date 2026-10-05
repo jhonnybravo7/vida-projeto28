@@ -3,8 +3,10 @@
   let adminRows=[];
 
   function adminUI(){
-    const email=String(window.user?.email||'').toLowerCase();
-    return !!(window.user?.app_metadata?.vida_admin===true || (email===ADMIN_EMAIL && window.master?.()));
+    const currentUser=(typeof user!=='undefined'&&user)?user:null;
+    const email=String(currentUser?.email||'').toLowerCase();
+    const isMaster=(typeof master==='function')?master():false;
+    return !!(currentUser?.app_metadata?.vida_admin===true || (email===ADMIN_EMAIL && isMaster));
   }
 
   async function api(body){
@@ -162,6 +164,15 @@
     ['admBase','admPlanner','admGym','admClub'].forEach(id=>{const e=$('#'+id);if(e)e.checked=false});
   };
 
+  const baseMasterPanel=window.masterPanel;
+  if(baseMasterPanel){
+    window.masterPanel=function(){
+      const html=baseMasterPanel();
+      if(!adminUI())return html;
+      return html+`<div class="card master-card top-gap-sm admin-master-shortcut"><span class="badge dark-badge">ADMIN</span><h3>Gestão de acessos</h3><p>Libere ou revogue clientes manualmente.</p><button class="btn full top-gap-sm" onclick="openVidaAdmin()">ABRIR PAINEL ADMIN</button></div>`;
+    };
+  }
+
   const baseProfile=window.profile;
   if(baseProfile){
     window.profile=function(){
@@ -176,5 +187,5 @@
     };
   }
 
-  window.__VIDA_ADMIN_VERSION='22.0.0';
+  window.__VIDA_ADMIN_VERSION='22.1.0';
 })();
