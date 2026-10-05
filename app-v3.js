@@ -88,4 +88,9 @@ async function logout(){await sb.auth.signOut();location.reload()}
 
 sb.auth.onAuthStateChange((e,s)=>{if(e==='PASSWORD_RECOVERY')recovery()});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
-(async()=>{if(new URLSearchParams(location.search).get('recovery')==='1')return recovery();const {data}=await sb.auth.getSession();if(data.session?.user){user=data.session.user;await route()}})();
+window.startVidaApp=async function(){
+  if(new URLSearchParams(location.search).get('recovery')==='1')return recovery();
+  const {data}=await sb.auth.getSession();
+  if(data.session?.user){user=data.session.user;await route()}
+};
+if(!window.__VIDA_DEFER_BOOT)window.startVidaApp();
