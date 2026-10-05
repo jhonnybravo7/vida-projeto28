@@ -8,17 +8,22 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Vida Nova — Projeto 28: educação para emagrecimento, acompanhamento e constância.">
   <title>Vida Nova — Projeto 28</title>
-  <link rel="manifest" href="/manifest.json?v=18">
-  <link rel="icon" href="/icon.svg?v=18">
-  <link rel="stylesheet" href="/styles.css?v=18">
-  <link rel="stylesheet" href="/v3.css?v=18">
-  <link rel="stylesheet" href="/experience-v4.css?v=18">
-  <link rel="stylesheet" href="/experience-v6.css?v=18">
-  <link rel="stylesheet" href="/experience-v8.css?v=18">
+  <link rel="manifest" href="/manifest.json?v=19">
+  <link rel="icon" href="/icon.svg?v=19">
+  <link rel="stylesheet" href="/styles.css?v=19">
+  <link rel="stylesheet" href="/v3.css?v=19">
+  <link rel="stylesheet" href="/experience-v4.css?v=19">
+  <link rel="stylesheet" href="/experience-v6.css?v=19">
+  <link rel="stylesheet" href="/experience-v8.css?v=19">
+  <link rel="stylesheet" href="/experience-v19.css?v=19">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
   <script>
     window.__VIDA_BOOT_STARTED=Date.now();
+    window.__VIDA_DEFER_BOOT=true;
+    window.VIDA_LESSONS={};
+    window.VIDA_WEEK_META={};
+    window.VIDA_GUIDES={};
+    window.VIDA_MATERIALS={};
     window.addEventListener('error',e=>{window.__VIDA_BOOT_ERROR=String(e.message||'Erro de carregamento')});
     window.addEventListener('unhandledrejection',e=>{window.__VIDA_BOOT_ERROR=String(e.reason?.message||e.reason||'Erro de inicialização')});
   </script>
@@ -30,12 +35,12 @@
       <span class="badge">VIDA NOVA</span>
       <h1>Projeto 28</h1>
       <p>Seu conteúdo, acompanhamento e constância em um só lugar.</p>
-      <div class="field"><label>E-mail</label><input id="loginEmail" type="email" autocomplete="email" placeholder="voce@email.com"></div>
+      <div class="field"><label>E-mail</label><input id="loginEmail" type="email" autocomplete="email" inputmode="email" placeholder="voce@email.com"></div>
       <div class="field"><label>Senha</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
       <button class="btn full" onclick="login()">ENTRAR</button>
-      <button class="text-button full" onclick="forgotPassword()">PRIMEIRO ACESSO / ESQUECI MINHA SENHA</button>
+      <button class="text-button full" onclick="forgotPassword()">PRIMEIRO ACESSO / CRIAR SENHA</button>
       <p id="authMsg" class="notice auth-msg"></p>
-      <p class="login-help">Comprou agora? Digite o mesmo e-mail usado no checkout e toque em <b>Primeiro acesso</b> para definir sua senha.</p>
+      <p class="login-help">Comprou agora? Digite o mesmo e-mail usado no checkout e toque em <b>Primeiro acesso / criar senha</b>.</p>
     </div>
   </div>
   <div id="root" class="app hidden">
@@ -51,9 +56,19 @@
   </div>
   <div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modalcard"><div class="modalbar"></div><div id="modalContent"></div></div></div>
   <div id="toast" class="toast"></div>
-  <script>window.VIDA_LESSONS={};</script>
-  <script src="/week1.js?v=18"></script><script src="/week2.js?v=18"></script><script src="/week3.js?v=18"></script><script src="/week4.js?v=18"></script><script src="/meta.js?v=18"></script><script src="/content-v3.js?v=18"></script><script src="/guides-full.js?v=18"></script><script src="/app-v3.js?v=18"></script><script src="/ui-patch.js?v=18"></script><script src="/signup-patch.js?v=18"></script><script src="/experience-v5.js?v=18"></script><script src="/experience-v6.js?v=18"></script><script src="/experience-v6-water.js?v=18"></script><script src="/experience-v8.js?v=18"></script>
+  <script src="/app-v3.js?v=19"></script>
+  <script src="/ui-patch.js?v=19"></script>
+  <script src="/experience-v5.js?v=19"></script>
+  <script src="/experience-v6.js?v=19"></script>
+  <script src="/experience-v6-water.js?v=19"></script>
+  <script src="/experience-v8.js?v=19"></script>
+  <script src="/runtime-v19.js?v=19"></script>
   <script>
+    window.startVidaApp?.().catch(()=>{
+      const login=document.getElementById('login'),root=document.getElementById('root'),m=document.getElementById('authMsg');
+      login?.classList.remove('hidden');root?.classList.add('hidden');
+      if(m)m.textContent='Não foi possível concluir a inicialização. Atualize a página e tente novamente.';
+    });
     setTimeout(()=>{
       const login=document.getElementById('login'),root=document.getElementById('root');
       if(login?.classList.contains('hidden')&&root?.classList.contains('hidden')){
