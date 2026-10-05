@@ -1,5 +1,5 @@
 (()=>{
-  const ACCENT='#22c55e';
+  const ACCENT='#c4ff59';
   const WEEK_COPY={
     1:{icon:'01',eyebrow:'SEMANA 1',title:'Como emagrecer',subtitle:'Entenda o processo e comece com um plano que você consegue repetir.'},
     2:{icon:'02',eyebrow:'SEMANA 2',title:'Como se alimentar',subtitle:'Organize escolhas sem transformar comida em medo.'},
