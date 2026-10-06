@@ -1,0 +1,14 @@
+/* Vida Nova first access v24 */
+.first-access-v24{position:relative;padding:2px 0 4px}
+.first-access-v24 h2{font-size:24px;line-height:1.05;margin:9px 0 8px;letter-spacing:-.035em}
+.first-access-v24>p{font-size:10px;line-height:1.5;color:var(--text-2)}
+.first-access-v24>p b{color:var(--text)}
+.fa-back{position:absolute;right:0;top:-2px;width:36px;height:36px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:24px;line-height:1}
+.fa-code-wrap{display:flex;justify-content:center;padding:18px 0 15px}
+.fa-code{width:100%;max-width:280px;text-align:center;font-size:32px!important;font-weight:900;letter-spacing:.32em;padding:16px 12px 16px 22px;border-radius:18px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);outline:none}
+.fa-code:focus{border-color:#a9df3e;box-shadow:0 0 0 3px color-mix(in srgb,#c4ff59 18%,transparent)}
+.fa-resend{margin-top:8px}
+.fa-resend:disabled{opacity:.45}
+.fa-timer{text-align:center!important;font-size:8px!important;margin:0!important;min-height:16px}
+.first-access-v24 .field{margin-top:12px}
+@media(max-width:390px){.fa-code{font-size:28px!important;letter-spacing:.26em}}
