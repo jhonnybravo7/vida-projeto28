@@ -1,7 +1,7 @@
 const CACHE='vida-nova-shell-v28';
 const CORE=[
   '/',
-  '/vida-v21.css?v=26',\n  '/admin-v22.css?v=22',\n  '/vida-v21.js?v=26',\n  '/admin-v22.js?v=23',\n  '/launch-stability-v26.js?v=26',
+  '/vida-v21.css?v=26',\n  '/admin-v22.css?v=22',\n  '/vida-v21.js?v=26',\n  '/admin-v22.js?v=23',\n  '/launch-stability-v26.js?v=26',\n  '/device-handoff-v27.js?v=27',
   '/manifest.json?v=22',
   '/icon.svg?v=22'
 ];
