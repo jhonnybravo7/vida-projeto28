@@ -1,0 +1,61 @@
+/* Vida Nova mobile shell v32 */
+:root{--vida-safe-top:env(safe-area-inset-top,0px);--vida-safe-bottom:env(safe-area-inset-bottom,0px)}
+html{background:var(--bg)}
+body{min-height:100dvh;overscroll-behavior-y:none}
+.app{min-height:100dvh}
+.top{
+  position:sticky!important;
+  top:0!important;
+  z-index:40!important;
+  min-height:64px;
+  padding:calc(14px + var(--vida-safe-top)) 18px 14px!important;
+  background:var(--bg)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border-bottom:1px solid var(--border)!important;
+  box-sizing:border-box;
+}
+.top .logo{font-size:16px;line-height:1.05}
+.top .brand-sub{margin-top:3px}
+.top .avatar{display:none!important}
+.screen{padding-top:16px!important}
+.nav{
+  width:calc(100% - 18px)!important;
+  bottom:calc(7px + var(--vida-safe-bottom))!important;
+  padding:7px 6px!important;
+  border-radius:22px!important;
+}
+.nav button{min-height:54px}
+.app{padding-bottom:calc(110px + var(--vida-safe-bottom))!important}
+.vida-menu-backdrop{
+  position:fixed;inset:0;z-index:180;background:rgba(0,0,0,.38);
+  opacity:0;pointer-events:none;transition:opacity .18s ease;
+}
+.vida-menu-backdrop.open{opacity:1;pointer-events:auto}
+.vida-side-menu{
+  position:fixed;z-index:190;top:0;right:0;height:100dvh;
+  width:min(390px,88vw);background:var(--surface);color:var(--text);
+  border-left:1px solid var(--border);box-shadow:-18px 0 50px rgba(0,0,0,.16);
+  transform:translateX(102%);transition:transform .22s ease;
+  padding:calc(18px + var(--vida-safe-top)) 16px calc(24px + var(--vida-safe-bottom));
+  box-sizing:border-box;overflow:auto;
+}
+.vida-side-menu.open{transform:translateX(0)}
+.vida-menu-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}
+.vida-menu-head h2{font-size:28px;margin:8px 0 0}
+.vida-menu-head>button{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:26px}
+.vida-menu-item{
+  width:100%;display:grid;grid-template-columns:42px 1fr 16px;gap:11px;align-items:center;
+  border:1px solid var(--border);background:var(--surface-2);color:var(--text);
+  border-radius:18px;padding:13px;margin-bottom:9px;text-align:left;
+}
+.vida-menu-item>span{width:42px;height:42px;border-radius:14px;background:var(--surface);display:grid;place-items:center;font-size:18px}
+.vida-menu-item b{display:block;font-size:13px}
+.vida-menu-item small{display:block;margin-top:3px;color:var(--text-2);font-size:9px;line-height:1.35}
+.vida-menu-item i{font-style:normal;font-size:20px;color:var(--text-2)}
+.vida-menu-item.danger{margin-top:18px}
+body.vida-menu-open{overflow:hidden}
+@media(min-width:700px){
+  .top{padding-top:14px!important}
+  .vida-side-menu{width:390px}
+}
