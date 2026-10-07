@@ -28,6 +28,18 @@
       return setAuth('Não foi possível enviar o acesso agora. Tente novamente.');
     }
     setAuth('Enviamos um link de acesso. Abra o e-mail e toque em “Sign in”. Você entra direto, sem criar senha.');
+    const btn=[...document.querySelectorAll('button')].find(b=>b.textContent?.includes('ENTRAR POR E-MAIL'));
+    if(btn){
+      btn.disabled=true;
+      let left=60;
+      const original='PRIMEIRO ACESSO / ENTRAR POR E-MAIL';
+      btn.textContent='REENVIAR EM '+left+'s';
+      const timer=setInterval(()=>{
+        left--;
+        if(left<=0){clearInterval(timer);btn.disabled=false;btn.textContent=original}
+        else btn.textContent='REENVIAR EM '+left+'s';
+      },1000);
+    }
   };
 
   window.startVidaApp=async function(){
