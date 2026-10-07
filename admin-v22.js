@@ -27,7 +27,7 @@
 
   function rowHtml(r){
     return `<button class="admin-user-row" type="button" onclick="selectAdminUser('${esc(r.email||'')}')">
-      <span class="admin-user-main"><b>${esc(r.full_name||r.email||'Usuária')}</b><small>${esc(r.email||'')}</small></span>
+      <span class="admin-user-main"><b>${esc(r.full_name||r.email||'Usuária')}</b><small>${esc(r.email||'')}</small><small>${r.last_sign_in_at?'Último acesso: '+new Date(r.last_sign_in_at).toLocaleDateString('pt-BR'):'Ainda não entrou'} · ${r.password_set?'Senha criada':'Sem senha criada'}</small></span>
       <span class="admin-user-origin ${String(r.origin||'').toLowerCase().replace(/\s+/g,'-')}">${esc(r.origin||'Sistema')}</span>
       <span class="admin-access-tags">${accessTags(r)}</span>
       <span class="admin-chevron">›</span>
@@ -59,7 +59,7 @@
         <div id="admSelected" class="admin-selected hidden"></div>
         <button class="btn full admin-save" type="button" onclick="adminSaveAccess()">SALVAR ACESSOS</button>
         <button class="btn outline full admin-revoke" type="button" onclick="adminRevokeAll()">REVOGAR TODOS</button>
-        <p class="admin-help">Se o e-mail ainda não existir, o sistema cria a conta e a pessoa usa <b>Primeiro acesso / criar senha</b>.</p>
+        <p class="admin-help">Se o e-mail ainda não existir, o sistema cria a conta. A pessoa entra pelo <b>link enviado por e-mail</b> e pode criar uma senha depois, dentro do próprio app.</p>
       </section>
 
       <section class="admin-list-section">
@@ -187,5 +187,6 @@
     };
   }
 
-  window.__VIDA_ADMIN_VERSION='22.1.0';
+  window.addEventListener('focus',()=>{if(document.querySelector('.admin-v22'))window.refreshAdminList?.()});
+  window.__VIDA_ADMIN_VERSION='22.2.0';
 })();
