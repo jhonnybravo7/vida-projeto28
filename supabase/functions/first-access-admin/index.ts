@@ -1,7 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
-const ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY') || Deno.env.get('SUPABASE_PUBLISHABLE_KEY') || ''
 const SECRET_JSON = Deno.env.get('SUPABASE_SECRET_KEYS')
 const SERVICE_KEY = SECRET_JSON ? JSON.parse(SECRET_JSON)['default'] : Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const ADMIN_EMAIL = 'jpcaminata@gmail.com'
@@ -16,10 +15,6 @@ const CORS = {
 
 function adminClient() {
   return createClient(SUPABASE_URL, SERVICE_KEY, { auth: { autoRefreshToken: false, persistSession: false } })
-}
-
-function userClient() {
-  return createClient(SUPABASE_URL, ANON_KEY, { auth: { autoRefreshToken: false, persistSession: false } })
 }
 
 async function identify(req: Request) {
@@ -81,6 +76,7 @@ async function issueTemporaryPassword(admin: any, adminUser: any, rawEmail: unkn
   if (userError || !result?.user) throw new Error('user_not_found')
   const target = result.user
   if (String(target.email || '').toLowerCase() !== email) throw new Error('email_mismatch')
+  if (target.last_sign_in_at) throw new Error('user_already_accessed')
 
   const temporaryPassword = makeTemporaryPassword()
   const appMetadata = {
