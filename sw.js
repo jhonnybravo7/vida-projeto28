@@ -1,8 +1,15 @@
-const CACHE='vida-nova-shell-v33';
+const CACHE='vida-nova-shell-v34';
 const CORE=[
   '/',
-  '/vida-v21.css?v=26',\n  '/admin-v22.css?v=22',
-  '/mobile-shell-v32.css?v=32',\n  '/vida-v21.js?v=26',\n  '/admin-v22.js?v=23',\n  '/launch-stability-v26.js?v=26',\n  '/device-handoff-v27.js?v=31',
+  '/vida-v21.css?v=26',
+  '/admin-v22.css?v=22',
+  '/first-access-v24.css?v=24',
+  '/mobile-shell-v32.css?v=32',
+  '/vida-v21.js?v=26',
+  '/admin-v22.js?v=23',
+  '/launch-stability-v26.js?v=26',
+  '/device-handoff-v27.js?v=31',
+  '/first-access-admin-v30.js?v=30',
   '/admin-tools-v29.js?v=29',
   '/mobile-shell-v32.js?v=32',
   '/manifest.json?v=22',
