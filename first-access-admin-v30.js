@@ -1,6 +1,8 @@
 (()=>{
   const MIN_PASSWORD_LENGTH=10;
   const FORCE_FLAG='vida_password_change_required';
+  const RECOVERY_WAIT_MS=60_000;
+  let recoveryAllowedAt=0,recoveryTimer=null;
 
   async function callFirstAccess(body){
     const {data,error}=await sb.functions.invoke('first-access-admin',{body});
@@ -63,6 +65,42 @@
     gatedRoute.__vidaOriginal=originalRoute;
     window.route=gatedRoute;
   }
+
+  function recoveryButton(){return document.querySelector('#login .loginbox > .text-button.full')}
+  function startRecoveryCooldown(){
+    recoveryAllowedAt=Date.now()+RECOVERY_WAIT_MS;
+    clearInterval(recoveryTimer);
+    const button=recoveryButton();
+    const originalText='PRIMEIRO ACESSO / ESQUECI A SENHA';
+    const tick=()=>{
+      const left=Math.max(0,Math.ceil((recoveryAllowedAt-Date.now())/1000));
+      const current=recoveryButton();
+      if(current){current.disabled=left>0;current.textContent=left?`AGUARDE ${left}S PARA TENTAR NOVAMENTE`:originalText}
+      if(!left)clearInterval(recoveryTimer);
+    };
+    if(button)button.disabled=true;
+    tick();
+    recoveryTimer=setInterval(tick,1000);
+  }
+
+  window.forgotPassword=async function(){
+    const left=Math.max(0,Math.ceil((recoveryAllowedAt-Date.now())/1000));
+    if(left)return setAuth(`Aguarde ${left}s antes de pedir outro e-mail.`);
+    const email=String(document.querySelector('#loginEmail')?.value||'').trim().toLowerCase();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return setAuth('Digite um e-mail válido.');
+    startRecoveryCooldown();
+    loading(true,'Enviando link de acesso...');
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+'/?recovery=1'});
+    loading(false);
+    if(error){
+      const message=String(error.message||'').toLowerCase();
+      if(message.includes('rate')||message.includes('security purposes')){
+        return setAuth('O serviço de e-mail atingiu o limite temporário. Aguarde antes de tentar novamente.');
+      }
+      return setAuth('Se esse e-mail estiver cadastrado, você receberá um link para criar ou redefinir sua senha.');
+    }
+    setAuth('Se esse e-mail estiver cadastrado, você receberá um link para criar ou redefinir sua senha.');
+  };
 
   function selectedEmail(){
     return String(document.querySelector('#admEmail')?.value||'').trim().toLowerCase();
