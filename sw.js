@@ -1,8 +1,13 @@
-const CACHE='vida-nova-shell-v33';
+const CACHE='vida-nova-shell-v35';
 const CORE=[
   '/',
-  '/vida-v21.css?v=26',\n  '/admin-v22.css?v=22',
-  '/mobile-shell-v32.css?v=32',\n  '/vida-v21.js?v=26',\n  '/admin-v22.js?v=23',\n  '/launch-stability-v26.js?v=26',\n  '/device-handoff-v27.js?v=31',
+  '/vida-v21.css?v=26',
+  '/admin-v22.css?v=22',
+  '/mobile-shell-v32.css?v=32',
+  '/vida-v21.js?v=26',
+  '/admin-v35.js?v=35',
+  '/launch-stability-v26.js?v=26',
+  '/device-handoff-v27.js?v=31',
   '/admin-tools-v29.js?v=29',
   '/mobile-shell-v32.js?v=32',
   '/manifest.json?v=22',
@@ -27,12 +32,13 @@ self.addEventListener('fetch',event=>{
   const url=new URL(req.url);
   if(url.origin!==self.location.origin)return;
 
+  if(url.pathname==='/ativar'||url.pathname==='/ativar.html')return;
   if(req.mode==='navigate'){
     event.respondWith((async()=>{
       try{
         const fresh=await fetch(req);
         const cache=await caches.open(CACHE);
-        cache.put('/',fresh.clone());
+        if(url.pathname==='/')cache.put('/',fresh.clone());
         return fresh;
       }catch{
         return (await caches.match('/')) || Response.error();
