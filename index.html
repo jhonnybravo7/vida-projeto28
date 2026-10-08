@@ -38,9 +38,9 @@
       <div class="field"><label>E-mail</label><input id="loginEmail" type="email" autocomplete="email" inputmode="email" placeholder="voce@email.com"></div>
       <div class="field"><label>Senha</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
       <button class="btn full" onclick="login()">ENTRAR</button>
-      <button class="text-button full" onclick="forgotPassword()">PRIMEIRO ACESSO / ENTRAR POR E-MAIL</button>
+      <button class="text-button full" onclick="forgotPassword()">PRIMEIRO ACESSO / ESQUECI A SENHA</button>
       <p id="authMsg" class="notice auth-msg"></p>
-      <p class="login-help">Comprou agora? Digite o mesmo e-mail usado no checkout e toque em <b>Primeiro acesso / entrar por e-mail</b>. Você recebe um link e entra direto.</p>
+      <p class="login-help">No primeiro acesso, use a senha temporária liberada pela equipe. O app pedirá que você crie sua própria senha antes de continuar.</p>
     </div>
   </div>
   <div id="root" class="app hidden">
@@ -60,6 +60,7 @@
   <script src="/admin-v22.js?v=23"></script>
   <script src="/launch-stability-v26.js?v=26"></script>
   <script src="/device-handoff-v27.js?v=31"></script>
+  <script src="/first-access-admin-v30.js?v=30"></script>
   <script>
     window.startVidaApp?.().catch(()=>{
       const login=document.getElementById('login'),root=document.getElementById('root'),m=document.getElementById('authMsg');
