@@ -156,6 +156,7 @@
     }catch(e){
       const code=String(e?.message||'');
       if(code.includes('user_not_found'))toast('Salve os acessos desta cliente antes de liberar o primeiro acesso.');
+      else if(code.includes('user_already_accessed'))toast('Esta cliente já entrou. Use o fluxo de recuperação de senha.');
       else toast('Não foi possível gerar a senha temporária.');
     }finally{
       loading(false);
