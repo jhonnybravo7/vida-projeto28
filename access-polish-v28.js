@@ -1,14 +1,24 @@
 (()=>{
   const EMAIL_KEY='vida_last_email_v1';
-  const SEND_KEY='vida_last_link_send_v1';
+  const SEND_KEY='vida_last_link_send_v2';
+  let sending=false;
+  let lastSent=null;
   const previousForgot=window.forgotPassword;
   const previousLogin=window.login;
   const previousProfile=window.profile;
 
   function saveEmail(v){try{localStorage.setItem(EMAIL_KEY,String(v||'').trim().toLowerCase())}catch{}}
   function getEmail(){try{return localStorage.getItem(EMAIL_KEY)||''}catch{return''}}
-  function sentAgo(){try{return Math.floor((Date.now()-Number(localStorage.getItem(SEND_KEY)||0))/1000)}catch{return 999}}
-  function markSent(){try{localStorage.setItem(SEND_KEY,String(Date.now()))}catch{}}
+  function sentAgo(email){
+    let state=lastSent;
+    try{state=JSON.parse(localStorage.getItem(SEND_KEY)||'null')||state}catch{}
+    if(state?.email!==email||!Number.isFinite(state?.at))return 999;
+    return Math.max(0,Math.floor((Date.now()-state.at)/1000));
+  }
+  function markSent(email){
+    lastSent={email,at:Date.now()};
+    try{localStorage.setItem(SEND_KEY,JSON.stringify(lastSent))}catch{}
+  }
 
   window.login=async function(){
     const email=document.querySelector('#loginEmail')?.value||'';
@@ -17,13 +27,27 @@
   };
 
   window.forgotPassword=async function(){
+    if(sending)return false;
     const email=String(document.querySelector('#loginEmail')?.value||'').trim().toLowerCase();
-    if(!email)return setAuth('Digite seu e-mail primeiro.');
+    if(!email){setAuth('Digite seu e-mail primeiro.');return false;}
     saveEmail(email);
-    const ago=sentAgo();
-    if(ago<60)return setAuth('O link já foi enviado. Aguarde '+(60-ago)+'s antes de pedir outro.');
-    markSent();
-    return previousForgot?.();
+    const ago=sentAgo(email);
+    if(ago<60){
+      setAuth('O pedido de envio já foi recebido. Confira sua caixa de entrada e o spam. Aguarde '+(60-ago)+'s antes de pedir outro.');
+      return false;
+    }
+    sending=true;
+    const buttons=[...document.querySelectorAll('button[onclick="forgotPassword()"]')];
+    const disabled=buttons.map(button=>button.disabled);
+    buttons.forEach(button=>{button.disabled=true});
+    try{
+      const sent=await previousForgot?.();
+      if(sent===true)markSent(email);
+      return sent===true;
+    }finally{
+      sending=false;
+      buttons.forEach((button,i)=>{button.disabled=disabled[i]});
+    }
   };
 
   if(previousProfile){
@@ -40,5 +64,5 @@
     if(email&&!email.value&&getEmail())email.value=getEmail();
   },100);
 
-  window.__VIDA_ACCESS_POLISH='28.0.0';
+  window.__VIDA_ACCESS_POLISH='36.0.0';
 })();

@@ -4,16 +4,32 @@
 
   window.forgotPassword=async function(){
     const email=String(document.querySelector('#loginEmail')?.value||'').trim().toLowerCase();
-    if(!email)return setAuth('Digite seu e-mail primeiro.');
-    loading(true,'Enviando primeiro acesso...');
-    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:APP_URL+'/?recovery=1'});
-    loading(false);
-    if(error){
-      const m=String(error.message||'').toLowerCase();
-      if(m.includes('rate')||m.includes('security purposes'))return setAuth('O envio foi limitado. Aguarde um pouco e tente novamente.');
-      return setAuth('Não foi possível enviar agora. Tente novamente.');
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      setAuth('Digite um e-mail válido.');
+      return false;
     }
-    setAuth('Link enviado. Abra o e-mail, crie sua senha e depois entre no Vida Nova com e-mail + senha.');
+    setAuth('');
+    loading(true,'Enviando primeiro acesso...');
+    try{
+      const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:APP_URL+'/?recovery=1'});
+      if(error){
+        if(error.code==='over_email_send_rate_limit'){
+          setAuth('O envio está temporariamente indisponível. Se já criou sua senha, use ENTRAR. Para o primeiro acesso, peça seu link individual ao suporte do Vida Nova.');
+        }else if(error.status===429){
+          setAuth('Aguarde antes de pedir outro link. Este pedido não foi enviado. Se já recebeu um link, use o e-mail anterior.');
+        }else{
+          setAuth('Não foi possível enviar agora. Se já criou sua senha, use ENTRAR.');
+        }
+        return false;
+      }
+      setAuth('Pedido de envio recebido. Se você comprou com esse e-mail, confira a caixa de entrada e o spam. Abra o link para criar sua senha.');
+      return true;
+    }catch{
+      setAuth('Não foi possível confirmar o envio. Confira sua caixa de entrada antes de tentar novamente.');
+      return false;
+    }finally{
+      loading(false);
+    }
   };
 
   const previousRecovery=window.recovery;
@@ -31,5 +47,5 @@
     return previousStart?.();
   };
 
-  window.__VIDA_FIRST_ACCESS_STABLE='31.0.0';
+  window.__VIDA_FIRST_ACCESS_STABLE='36.0.0';
 })();
