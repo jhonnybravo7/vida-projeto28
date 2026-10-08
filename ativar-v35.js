@@ -11,7 +11,7 @@ form.addEventListener('submit',async e=>{
   const response=await fetch('https://hvzlegeufiigjyanfyuu.supabase.co/functions/v1/first-access-link',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'redeem',token,email,password:password.value})});
   const data=await response.json();
   if(!response.ok||!data.ok){
-   const messages={invalid_link:'Confira o e-mail da compra. Se estiver correto, este link expirou ou já foi usado. Peça um novo link ao suporte.',password_requirements:'Escolha uma senha com pelo menos 6 caracteres.',password_rejected:'Escolha uma senha um pouco mais forte e tente novamente.',activation_failed:'Não foi possível finalizar. Peça um novo link ao suporte.'};
+   const messages={invalid_link:'Confira o e-mail para o qual o link foi gerado. Se estiver correto, este link expirou ou já foi usado. Peça um novo link ao suporte.',password_requirements:'Escolha uma senha com pelo menos 6 caracteres.',password_rejected:'Escolha uma senha um pouco mais forte e tente novamente.',activation_failed:'Não foi possível finalizar. Peça um novo link ao suporte.'};
    message.textContent=messages[data.error]||'Não foi possível concluir agora. Tente novamente.';button.disabled=false;return;
   }
   password.value='';

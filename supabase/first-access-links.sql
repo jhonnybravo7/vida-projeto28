@@ -10,3 +10,5 @@ create table if not exists public.first_access_links (
 alter table public.first_access_links enable row level security;
 revoke all on public.first_access_links from public, anon, authenticated;
 grant select, insert, update, delete on public.first_access_links to service_role;
+alter table public.first_access_links add column if not exists purpose text not null default 'first_access' check (purpose in ('first_access','recovery'));
+

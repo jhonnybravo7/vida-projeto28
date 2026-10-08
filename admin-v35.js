@@ -59,7 +59,7 @@
         <div id="admSelected" class="admin-selected hidden"></div>
         <button class="btn full admin-save" type="button" onclick="adminSaveAccess()">SALVAR ACESSOS</button>
         <button class="btn outline full admin-revoke" type="button" onclick="adminRevokeAll()">REVOGAR TODOS</button>
-        <button class="btn outline full" type="button" onclick="adminIssueAccessLink()">GERAR LINK DE PRIMEIRO ACESSO</button><p class="admin-help">Salve os acessos e gere um link individual. Envie em particular à cliente: ela cria a senha e entra sem aguardar e-mail. Válido por 24 horas e apenas para quem ainda não entrou.</p>
+        <button class="btn outline full" type="button" onclick="adminIssueAccessLink()">GERAR LINK DE ACESSO</button><p class="admin-help">Selecione a cliente com acesso liberado e gere o link. Copie e envie em particular: ela define uma nova senha e entra. Serve para primeiro acesso ou recuperação, com uso único e validade de 24 horas.</p>
       </section>
 
       <section class="admin-list-section">
@@ -188,15 +188,15 @@
   }
 
   window.addEventListener('focus',()=>{if(document.querySelector('.admin-v22'))window.refreshAdminList?.()});
-  window.__VIDA_ADMIN_VERSION='22.2.0';
+  window.__VIDA_ADMIN_VERSION='37.0.0';
 })();
 (()=>{window.adminIssueAccessLink=async function(){
 const email=String(document.querySelector('#admEmail')?.value||'').trim().toLowerCase();if(!email)return toast('Selecione uma cliente.');
 loading(true,'Gerando link...');
-try{const {data,error}=await sb.functions.invoke('first-access-link',{body:{action:'issue',email}});
+try{const {data,error}=await sb.functions.invoke('first-access-link',{body:{action:'issue',email,purpose:'recovery'}});
 if(error||!data?.ok){let detail=data;try{if(error?.context)detail=await error.context.json()}catch{}
-return toast(detail?.error==='already_accessed'?'Esta cliente já entrou. Use a recuperação de senha.':'Não foi possível gerar. Confira se o acesso está salvo.');}
-modal('<span class="badge">PRIMEIRO ACESSO</span><h2>Link pronto.</h2><p>Envie em particular para '+esc(email)+'. A cliente cria a senha e entra. Válido por 24 horas.</p><div class="field"><label>Link individual</label><input id="accessLink35" readonly></div><button id="copyLink35" class="btn full">COPIAR LINK</button>');
+return toast('Não foi possível gerar. Confira se o acesso da cliente está liberado.');}
+modal('<span class="badge">LINK DE ACESSO</span><h2>Link pronto.</h2><p>Envie em particular para '+esc(email)+'. A cliente define uma nova senha e entra. Uso único, válido por 24 horas.</p><div class="field"><label>Link individual</label><input id="accessLink35" readonly></div><button id="copyLink35" class="btn full">COPIAR LINK</button>');
 document.querySelector('#accessLink35').value=data.url;
 document.querySelector('#copyLink35').onclick=async()=>{try{await navigator.clipboard.writeText(data.url);toast('Link copiado')}catch{document.querySelector('#accessLink35').select();toast('Selecione e copie o link')}};
 }catch{toast('Não foi possível gerar o link.')}finally{loading(false)}

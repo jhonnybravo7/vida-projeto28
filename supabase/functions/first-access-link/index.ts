@@ -7,6 +7,7 @@ const headers={'Content-Type':'application/json','Cache-Control':'no-store','Acc
 const admin=createClient(URL,KEY,{auth:{persistSession:false,autoRefreshToken:false}})
 const reply=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers})
 const hash=async(value:string)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,'0')).join('')
+const protectedAccount=(u:any)=>u?.app_metadata?.vida_admin===true||u?.app_metadata?.vida_role==='master'||emailOf(u?.email)==='jpcaminata@gmail.com'
 const emailOf=(v:unknown)=>String(v||'').trim().toLowerCase()
 async function eligible(id:string){
  const {data,error}=await admin.from('feature_access').select('base_access').eq('user_id',id).maybeSingle()
@@ -26,14 +27,17 @@ Deno.serve(async(req:Request)=>{
    if(authError||!u||!(u.app_metadata?.vida_admin===true||(u.email==='jpcaminata@gmail.com'&&u.app_metadata?.vida_role==='master')))return reply({ok:false,error:'forbidden'},403)
    const {data:p}=await admin.from('profiles').select('id').eq('email',email).maybeSingle()
    if(!p||!await eligible(p.id))return reply({ok:false,error:'no_access'},400)
+   const purpose=body.purpose??'first_access'
+   if(!['first_access','recovery'].includes(purpose))return reply({ok:false,error:'invalid_purpose'},400)
    const {data:t}=await admin.auth.admin.getUserById(p.id)
-   if(!t.user||t.user.last_sign_in_at)return reply({ok:false,error:'already_accessed'},400)
+   if(!t.user||protectedAccount(t.user))return reply({ok:false,error:'no_access'},400)
+   if(purpose==='first_access'&&t.user.last_sign_in_at)return reply({ok:false,error:'already_accessed'},400)
    const token=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('')
    const expires=new Date(Date.now()+86400000).toISOString()
-   const {error}=await admin.from('first_access_links').insert({token_hash:await hash(token),user_id:p.id,email,expires_at:expires,created_by:u.id})
+   const {error}=await admin.from('first_access_links').insert({token_hash:await hash(token),user_id:p.id,email,expires_at:expires,created_by:u.id,purpose})
    if(error)throw error
-   await admin.from('admin_access_log').insert({admin_user_id:u.id,target_user_id:p.id,target_email:email,action:'issue_first_access_link',access_state:{expires_at:expires}})
-   return reply({ok:true,url:APP+'/ativar#'+token,expires_at:expires})
+   await admin.from('admin_access_log').insert({admin_user_id:u.id,target_user_id:p.id,target_email:email,action:purpose==='recovery'?'issue_recovery_link':'issue_first_access_link',access_state:{expires_at:expires,purpose}})
+   return reply({ok:true,url:APP+'/ativar#'+token,expires_at:expires,purpose})
   }
   if(body.action!=='redeem')return reply({ok:false,error:'invalid_action'},400)
   const token=String(body.token||''),password=String(body.password||'')
@@ -43,7 +47,7 @@ Deno.serve(async(req:Request)=>{
   const {data:link,error}=await admin.from('first_access_links').select('*').eq('token_hash',digest).eq('email',email).is('consumed_at',null).gt('expires_at',new Date().toISOString()).maybeSingle()
   if(error||!link)return reply({ok:false,error:'invalid_link'},400)
   const {data:target,error:targetError}=await admin.auth.admin.getUserById(link.user_id)
-  if(targetError||!target.user||emailOf(target.user.email)!==email||target.user.last_sign_in_at||!await eligible(link.user_id))return reply({ok:false,error:'invalid_link'},400)
+  if(targetError||!target.user||emailOf(target.user.email)!==email||protectedAccount(target.user)||!['first_access','recovery'].includes(link.purpose??'first_access')||((link.purpose??'first_access')==='first_access'&&target.user.last_sign_in_at)||(link.purpose==='recovery'&&!link.created_by)||!await eligible(link.user_id))return reply({ok:false,error:'invalid_link'},400)
   // Atomic claim: a link can only be redeemed once, including concurrent requests.
   const claimedAt=new Date().toISOString()
   const {data:claim,error:claimError}=await admin.from('first_access_links').update({consumed_at:claimedAt}).eq('token_hash',digest).is('consumed_at',null).gt('expires_at',claimedAt).select('user_id').maybeSingle()
@@ -61,8 +65,9 @@ Deno.serve(async(req:Request)=>{
   // No email is sent. Existing app login persists the returned session in this browser.
   const client=createClient(URL,KEY,{auth:{persistSession:false,autoRefreshToken:false}})
   const {data:login,error:loginError}=await client.auth.signInWithPassword({email,password})
-  await admin.from('admin_access_log').insert({target_user_id:link.user_id,target_email:email,action:'complete_first_access_link',access_state:{password_set:true}})
+  await admin.from('admin_access_log').insert({target_user_id:link.user_id,target_email:email,action:link.purpose==='recovery'?'complete_recovery_link':'complete_first_access_link',access_state:{password_set:true,purpose:link.purpose??'first_access'}})
   if(loginError||!login.session)return reply({ok:true,login_required:true})
   return reply({ok:true,session:{access_token:login.session.access_token,refresh_token:login.session.refresh_token}})
  }catch{return reply({ok:false,error:'request_failed'},400)}
 })
+
