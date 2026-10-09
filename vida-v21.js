@@ -8,17 +8,19 @@ const lessons=window.VIDA_LESSONS||{}, weeks=window.VIDA_WEEK_META||{}, guides=w
 let user=null, obStep=1, ob={}, matCache={}, planner=null;
 let S={role:'member',profile:{},feature:{},onboarding:null,enrollment:null,checkins:[],measurements:[],progress:[],waitlist:false,config:{},masterDay:null,masterPlanner:null};
 const $=q=>document.querySelector(q), esc=x=>String(x??'').replace(/[&<>'\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c]));
-const iso=()=>new Date().toISOString().slice(0,10), n=v=>v===''||v==null?null:Number(v);
+const vidaDateFormat=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'});
+function brasiliaDate(value=new Date()){const parts=vidaDateFormat.formatToParts(new Date(value));const get=type=>parts.find(p=>p.type===type).value;return `${get('year')}-${get('month')}-${get('day')}`}
+const iso=()=>brasiliaDate(), calendarToday=()=>new Date(iso()+'T12:00:00Z'), n=v=>v===''||v==null?null:Number(v);
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2200)}
 function loading(on,t='Carregando...'){const e=$('#globalLoading');e.querySelector('b').textContent=t;e.classList.toggle('hidden',!on)}
 function modal(h){$('#modalContent').innerHTML=h;$('#modal').classList.add('open')} function closeModal(){$('#modal').classList.remove('open')}
 function master(){return S.role==='master'} function base(){return master()||!!S.feature.base_access} function plannerAccess(){return master()?(S.masterPlanner===null?true:S.masterPlanner):!!S.feature.planner_access}
 function fdate(d){if(!d)return'—';const [y,m,a]=d.slice(0,10).split('-');return`${a}/${m}/${y}`}
-function days(a,b){return Math.floor((new Date(b+'T12:00:00')-new Date(a+'T12:00:00'))/86400000)}
+function days(a,b){return Math.floor((new Date(b+'T12:00:00Z')-new Date(a+'T12:00:00Z'))/86400000)}
 function day(){if(master()&&S.masterDay)return S.masterDay;return S.enrollment?.start_date?Math.max(1,Math.min(28,days(S.enrollment.start_date,iso())+1)):1}
 function wnow(){return day()>=22?4:day()>=15?3:day()>=8?2:1}
 function todayCheck(){return S.checkins.find(x=>x.checkin_date===iso())||{water_ml:0}}
-function todayContent(){return S.progress.some(x=>x.completed_at?.slice(0,10)===iso())}
+function todayContent(){return S.progress.some(x=>x.completed_at&&brasiliaDate(x.completed_at)===iso())}
 function flags(c=todayCheck(),content=todayContent()){return{water:(c.water_ml||0)>0,movement:!!c.trained||(c.movement_minutes||0)>0,sleep:(c.sleep_minutes||0)>0,daily:!!c.daily_checkin_completed,content}}
 function score(c=todayCheck(),content=todayContent()){return Object.values(flags(c,content)).filter(Boolean).length*20}
 function nav(s){document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===s))}
@@ -75,9 +77,9 @@ async function daily(){await upCheck({daily_checkin_completed:true})}
 function measurements(){const m=S.measurements[0]||{};modal(`<h2>Peso e medidas</h2><div class="form-grid">${[['mw','Peso',m.weight_kg],['mc','Cintura',m.waist_cm],['ma','Abdômen',m.abdomen_cm],['mh','Quadril',m.hip_cm],['mb','Braço',m.arm_cm],['mt','Coxa',m.thigh_cm]].map(x=>`<div class="field"><label>${x[1]}</label><input id="${x[0]}" type="number" step="0.1" value="${x[2]||''}"></div>`).join('')}</div><button class="btn full" onclick="saveMeasurements()">SALVAR</button>`)}
 async function saveMeasurements(){loading(true,'Salvando medidas...');const {error}=await sb.from('body_measurements').insert({user_id:user.id,measured_on:iso(),weight_kg:n($('#mw').value),waist_cm:n($('#mc').value),abdomen_cm:n($('#ma').value),hip_cm:n($('#mh').value),arm_cm:n($('#mb').value),thigh_cm:n($('#mt').value)});loading(false);if(error)return toast('Não foi possível salvar');closeModal();await hydrate();go('track')}
 
-function progress(){const last7=[];for(let k=6;k>=0;k--){const d=new Date();d.setDate(d.getDate()-k);const di=d.toISOString().slice(0,10),c=S.checkins.find(x=>x.checkin_date===di),ct=S.progress.some(x=>x.completed_at?.slice(0,10)===di);last7.push([di,score(c||{},ct)])}const done=S.progress.length,total=Object.values(lessons).flat().length,a=S.measurements[S.measurements.length-1],z=S.measurements[0];return`<section class="screen"><div class="hero"><div class="eyebrow">PROGRESSO</div><h1>Olhe para tendência, não para um único dia.</h1><p>Seu acompanhamento existe para mostrar o processo.</p></div><div class="grid2 top-gap"><div class="stat"><b>${day()}/28</b><span>Dias</span></div><div class="stat"><b>${score()}%</b><span>Constância hoje</span></div><div class="stat"><b>${done}</b><span>Conteúdos concluídos</span></div><div class="stat"><b>${z?.weight_kg??'—'} kg</b><span>Último peso</span></div></div><div class="card top-gap"><h3>Constância — últimos 7 dias</h3><div class="bar-wrap">${last7.map(x=>`<div class="bar" data-label="${x[0].slice(8)}" style="height:${Math.max(3,x[1])}%"></div>`).join('')}</div></div><div class="card top-gap"><h3>Conteúdo</h3><p>${done} de ${total} ensinamentos concluídos.</p><div class="progress"><span style="width:${total?Math.round(done/total*100):0}%"></span></div></div><div class="card top-gap"><h3>Início x atual</h3><div class="compare-grid"><div><small>Primeiro peso</small><b>${a?.weight_kg??'—'} kg</b><span>Cintura ${a?.waist_cm??'—'} cm</span></div><div><small>Atual</small><b>${z?.weight_kg??'—'} kg</b><span>Cintura ${z?.waist_cm??'—'} cm</span></div></div></div>${day()===28?'<button class="btn full top-gap" onclick="openMaterial(4,0)">FAZER AVALIAÇÃO FINAL</button>':''}<p class="notice top-gap">Peso, IMC e medidas são indicadores limitados quando vistos isoladamente. O VIDA não usa esses números como diagnóstico.</p></section>`}
+function progress(){const last7=[];for(let k=6;k>=0;k--){const d=calendarToday();d.setUTCDate(d.getUTCDate()-k);const di=d.toISOString().slice(0,10),c=S.checkins.find(x=>x.checkin_date===di),ct=S.progress.some(x=>x.completed_at&&brasiliaDate(x.completed_at)===di);last7.push([di,score(c||{},ct)])}const done=S.progress.length,total=Object.values(lessons).flat().length,a=S.measurements[S.measurements.length-1],z=S.measurements[0];return`<section class="screen"><div class="hero"><div class="eyebrow">PROGRESSO</div><h1>Olhe para tendência, não para um único dia.</h1><p>Seu acompanhamento existe para mostrar o processo.</p></div><div class="grid2 top-gap"><div class="stat"><b>${day()}/28</b><span>Dias</span></div><div class="stat"><b>${score()}%</b><span>Constância hoje</span></div><div class="stat"><b>${done}</b><span>Conteúdos concluídos</span></div><div class="stat"><b>${z?.weight_kg??'—'} kg</b><span>Último peso</span></div></div><div class="card top-gap"><h3>Constância — últimos 7 dias</h3><div class="bar-wrap">${last7.map(x=>`<div class="bar" data-label="${x[0].slice(8)}" style="height:${Math.max(3,x[1])}%"></div>`).join('')}</div></div><div class="card top-gap"><h3>Conteúdo</h3><p>${done} de ${total} ensinamentos concluídos.</p><div class="progress"><span style="width:${total?Math.round(done/total*100):0}%"></span></div></div><div class="card top-gap"><h3>Início x atual</h3><div class="compare-grid"><div><small>Primeiro peso</small><b>${a?.weight_kg??'—'} kg</b><span>Cintura ${a?.waist_cm??'—'} cm</span></div><div><small>Atual</small><b>${z?.weight_kg??'—'} kg</b><span>Cintura ${z?.waist_cm??'—'} cm</span></div></div></div>${day()===28?'<button class="btn full top-gap" onclick="openMaterial(4,0)">FAZER AVALIAÇÃO FINAL</button>':''}<p class="notice top-gap">Peso, IMC e medidas são indicadores limitados quando vistos isoladamente. O VIDA não usa esses números como diagnóstico.</p></section>`}
 
-async function openPlanner(){if(!plannerAccess())return plannerUpgrade();const ws=(()=>{const d=new Date(),k=d.getDay()===0?-6:1-d.getDay();d.setDate(d.getDate()+k);return d.toISOString().slice(0,10)})();loading(true,'Abrindo Planner+...');const {data}=await sb.from('planner_weeks').select('*').eq('user_id',user.id).eq('week_start',ws).maybeSingle();loading(false);planner=data||{week_start:ws,goals:[],review:{}};const g=planner.goals||[],r=planner.review||{};modal(`<div class="article"><span class="badge">PLANNER+</span><h2>Minha semana</h2><div class="field"><label>Foco principal</label><textarea id="pf">${esc(planner.focus||'')}</textarea></div>${[0,1,2].map(i=>`<div class="field"><label>Meta ${i+1}</label><input id="pg${i}" value="${esc(g[i]||'')}"></div>`).join('')}<div class="field"><label>Plano B</label><textarea id="pb">${esc(planner.plan_b||'')}</textarea></div><div class="field"><label>O que funcionou?</label><textarea id="pr1">${esc(r.worked||'')}</textarea></div><div class="field"><label>O que atrapalhou?</label><textarea id="pr2">${esc(r.blocked||'')}</textarea></div><div class="field"><label>Ajuste para a próxima semana</label><textarea id="pr3">${esc(r.adjust||'')}</textarea></div><div class="field"><label>Minha pequena vitória</label><textarea id="pr4">${esc(r.win||'')}</textarea></div><button class="btn full" onclick="savePlanner()">SALVAR PLANNER</button></div>`)}
+async function openPlanner(){if(!plannerAccess())return plannerUpgrade();const ws=(()=>{const d=calendarToday(),k=d.getUTCDay()===0?-6:1-d.getUTCDay();d.setUTCDate(d.getUTCDate()+k);return d.toISOString().slice(0,10)})();loading(true,'Abrindo Planner+...');const {data}=await sb.from('planner_weeks').select('*').eq('user_id',user.id).eq('week_start',ws).maybeSingle();loading(false);planner=data||{week_start:ws,goals:[],review:{}};const g=planner.goals||[],r=planner.review||{};modal(`<div class="article"><span class="badge">PLANNER+</span><h2>Minha semana</h2><div class="field"><label>Foco principal</label><textarea id="pf">${esc(planner.focus||'')}</textarea></div>${[0,1,2].map(i=>`<div class="field"><label>Meta ${i+1}</label><input id="pg${i}" value="${esc(g[i]||'')}"></div>`).join('')}<div class="field"><label>Plano B</label><textarea id="pb">${esc(planner.plan_b||'')}</textarea></div><div class="field"><label>O que funcionou?</label><textarea id="pr1">${esc(r.worked||'')}</textarea></div><div class="field"><label>O que atrapalhou?</label><textarea id="pr2">${esc(r.blocked||'')}</textarea></div><div class="field"><label>Ajuste para a próxima semana</label><textarea id="pr3">${esc(r.adjust||'')}</textarea></div><div class="field"><label>Minha pequena vitória</label><textarea id="pr4">${esc(r.win||'')}</textarea></div><button class="btn full" onclick="savePlanner()">SALVAR PLANNER</button></div>`)}
 async function savePlanner(){const p={user_id:user.id,week_start:planner.week_start,focus:$('#pf').value,goals:[$('#pg0').value,$('#pg1').value,$('#pg2').value].filter(Boolean),plan_b:$('#pb').value,review:{worked:$('#pr1').value,blocked:$('#pr2').value,adjust:$('#pr3').value,win:$('#pr4').value}};loading(true,'Salvando...');const {error}=await sb.from('planner_weeks').upsert(p,{onConflict:'user_id,week_start'});loading(false);if(error)return toast('Não foi possível salvar');closeModal();toast('Planner salvo')}
 function plannerUpgrade(){const c=S.config.planner_checkout||{},url=c.url;modal(`<h2>Planner+</h2><p>Você já acompanha. Agora pode planejar.</p><div class="card"><div class="metric sm">+ R$ ${Number(c.price_brl||6).toFixed(2).replace('.',',')}</div><p>Calendário semanal e acompanhamento na mesma conta, com pagamento único.</p></div>${url?`<a class="btn full linkbtn top-gap" href="${esc(url)}" target="_blank">IR PARA O CHECKOUT</a>`:'<button class="btn full top-gap" disabled>CHECKOUT EM CONFIGURAÇÃO</button>'}<p class="notice top-gap-sm">Após o pagamento único, o recurso será liberado automaticamente.</p>`)}
 function gym(){const c=S.config.gymrats||{start_date:'2026-11-01',end_date:'2026-12-15'};return`<section class="screen"><div class="moduleHero gymhero"><small>PRÓXIMA FASE</small><h1>GYM RATS</h1><p>45 dias para continuar aparecendo e transformar constância em jogo.</p></div><div class="card"><span class="badge">EM PREPARAÇÃO</span><h3 class="top-gap-sm">${fdate(c.start_date)} → ${fdate(c.end_date)}</h3><p>O Projeto 28 ensina a base. O Gym Rats usa essa base como próxima etapa.</p></div><div class="card top-gap"><h3>Estrutura em preparação</h3><p>Regras, missões, pontuação, ranking e premiações só aparecem quando a mecânica final estiver fechada.</p></div></section>`}
@@ -389,11 +391,11 @@ if(!window.__VIDA_DEFER_BOOT)window.startVidaApp();
   };
 
   function weekMondayV7(offset=0){
-    const d=new Date(),dow=d.getDay()||7;d.setHours(12,0,0,0);d.setDate(d.getDate()-dow+1+offset*7);return d;
+    const d=calendarToday(),dow=d.getUTCDay()||7;d.setUTCDate(d.getUTCDate()-dow+1+offset*7);return d;
   }
   function dateIsoV7(d){return d.toISOString().slice(0,10)}
-  function plusDaysV7(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
-  function dayNameV7(d){return ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][d.getDay()]}
+  function plusDaysV7(d,n){const x=new Date(d);x.setUTCDate(x.getUTCDate()+n);return x}
+  function dayNameV7(d){return ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][d.getUTCDay()]}
   let plannerOffsetV7=0,plannerDraftV7={};
   function normalizePlannerV7(p){const g=p?.goals;return g&&!Array.isArray(g)&&g.version===2?g:{version:2,days:{}}}
   function actualV7(date){
@@ -414,7 +416,7 @@ if(!window.__VIDA_DEFER_BOOT)window.startVidaApp();
       const di=dateIsoV7(d),a=actualV7(di),planned=plannerDraftV7.days?.[di]||[];
       const chips=['Musculação','Cardio','Caminhada','Mobilidade','Descanso'].map(t=>'<button type="button" data-plan="'+t+'" class="'+(planned.includes(t)?'active':'')+'" onclick="togglePlanV7(this,\''+di+'\')">'+t+'</button>').join('');
       const actual=a?.done?'<div class="planner-actual-v7"><b>Registrado</b><span>'+(a.types.length?esc(a.types.join(' + ')):'movimento')+(a.minutes?' · '+a.minutes+' min':'')+'</span></div>':'';
-      return '<section class="planner-day-v7 '+(di===iso()?'today':'')+'" data-date="'+di+'"><div class="planner-day-head-v7"><div><small>'+dayNameV7(d)+'</small><b>'+d.getDate()+'</b></div><span class="'+(a?.done?'done':'')+'">'+(a?.done?'✓ realizado':'planejar')+'</span></div><div class="planner-chips-v7">'+chips+'</div>'+actual+'</section>';
+      return '<section class="planner-day-v7 '+(di===iso()?'today':'')+'" data-date="'+di+'"><div class="planner-day-head-v7"><div><small>'+dayNameV7(d)+'</small><b>'+d.getUTCDate()+'</b></div><span class="'+(a?.done?'done':'')+'">'+(a?.done?'✓ realizado':'planejar')+'</span></div><div class="planner-chips-v7">'+chips+'</div>'+actual+'</section>';
     }).join('');
     modal('<div class="planner-v7"><div class="planner-top-v7"><span class="badge">PLANNER+</span><h2>Minha semana</h2><p>Planeje treinos no calendário e compare com o que realmente aconteceu.</p></div><div class="planner-nav-v7"><button onclick="openPlanner('+(offset-1)+')">‹</button><b>'+fdate(ws)+' — '+fdate(dateIsoV7(days7[6]))+'</b><button onclick="openPlanner('+(offset+1)+')">›</button></div><div class="planner-summary-v7"><div><b id="planStrength">0</b><span>força</span></div><div><b id="planCardio">0</b><span>cardio</span></div><div><b id="planDone">0</b><span>realizados</span></div></div><div class="planner-days-v7">'+cards+'</div><button class="btn full planner-save-v7" onclick="savePlannerV7()">SALVAR CALENDÁRIO</button></div>');
     refreshPlannerV7();
@@ -536,11 +538,11 @@ if(!window.__VIDA_DEFER_BOOT)window.startVidaApp();
     return out;
   };
 
-  function localDate(d){const x=new Date(d);x.setHours(12,0,0,0);return x}
-  function monday(offset=0){const d=localDate(new Date()),dow=d.getDay()||7;d.setDate(d.getDate()-dow+1+(offset*7));return d}
-  function addDays(d,n){const x=localDate(d);x.setDate(x.getDate()+n);return x}
+  function localDate(d){return new Date(brasiliaDate(d)+'T12:00:00Z')}
+  function monday(offset=0){const d=localDate(new Date()),dow=d.getUTCDay()||7;d.setUTCDate(d.getUTCDate()-dow+1+(offset*7));return d}
+  function addDays(d,n){const x=localDate(d);x.setUTCDate(x.getUTCDate()+n);return x}
   function di(d){return d.toISOString().slice(0,10)}
-  function dayLabel(d){return ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'][d.getDay()]}
+  function dayLabel(d){return ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'][d.getUTCDay()]}
   function titleCase(s){return String(s||'').split(' ').map(x=>x?x[0].toUpperCase()+x.slice(1):'').join(' ')}
   function normPlan(p){const g=p?.goals;return g&&!Array.isArray(g)&&g.days?{version:3,days:{...(g.days||{})}}:{version:3,days:{}}}
   function actual(date){
@@ -561,8 +563,8 @@ if(!window.__VIDA_DEFER_BOOT)window.startVidaApp();
     let s=0,d=localDate(new Date());
     for(let i=0;i<35;i++){
       const date=di(d),c=all.find(x=>x.checkin_date===date);
-      if(c&&(c.daily_checkin_completed||c.trained||c.movement_minutes||c.sleep_minutes||c.water_ml)){s++;d.setDate(d.getDate()-1)}
-      else if(i===0){d.setDate(d.getDate()-1)}else break;
+      if(c&&(c.daily_checkin_completed||c.trained||c.movement_minutes||c.sleep_minutes||c.water_ml)){s++;d.setUTCDate(d.getUTCDate()-1)}
+      else if(i===0){d.setUTCDate(d.getUTCDate()-1)}else break;
     }
     return s;
   }
@@ -583,7 +585,7 @@ if(!window.__VIDA_DEFER_BOOT)window.startVidaApp();
     const path=coords.map((q,i)=>(i?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' '),delta=pts.at(-1).v-pts[0].v;
     return `<div class="pv8-weight-head"><b>${pts.at(-1).v.toFixed(1)} kg</b><span>${delta>0?'+':''}${delta.toFixed(1)} kg</span></div><svg class="pv8-weight-chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="M8 26 H272 M8 52 H272" class="pv8-grid"/><path d="${path}" class="pv8-line"/>${coords.map((q,i)=>`<circle cx="${q[0]}" cy="${q[1]}" r="${i===coords.length-1?4:2.5}"/>`).join('')}</svg>`;
   }
-  function renderRhythm(rows){return `<div class="pv8-rhythm-bars">${rows.map(r=>{const sc=dayRhythm(r.a);return `<button type="button" onclick="focusPlannerDayV8('${r.date}')"><span class="pv8-bar"><i style="height:${Math.max(8,sc)}%"></i></span><b>${dayLabel(r.d).slice(0,1)}</b><small>${r.d.getDate()}</small></button>`}).join('')}</div>`}
+  function renderRhythm(rows){return `<div class="pv8-rhythm-bars">${rows.map(r=>{const sc=dayRhythm(r.a);return `<button type="button" onclick="focusPlannerDayV8('${r.date}')"><span class="pv8-bar"><i style="height:${Math.max(8,sc)}%"></i></span><b>${dayLabel(r.d).slice(0,1)}</b><small>${r.d.getUTCDate()}</small></button>`}).join('')}</div>`}
   function planSummary(items){if(!items?.length)return '<span class="pv8-no-plan">Sem plano</span>';return items.map(x=>`<span>${esc(x)}</span>`).join('')}
   function actualSummary(a){if(!a.exists)return 'Sem registro';if(a.done){const names=a.types.length?a.types.map(titleCase).join(' + '):'Movimento';return names+(a.minutes?` · ${a.minutes} min`:'')}if(a.closed)return 'Dia concluído';return 'Sem treino registrado'}
   function editorChips(date,planned){return ['Musculação','Cardio','Caminhada','Mobilidade','Descanso'].map(t=>`<button type="button" data-pv8-plan="${t}" class="${planned.includes(t)?'active':''}" onclick="togglePlanV8(this,'${date}')">${t}</button>`).join('')}
@@ -598,7 +600,7 @@ if(!window.__VIDA_DEFER_BOOT)window.startVidaApp();
       <section class="pv8-insight"><span>${ins.icon}</span><div><small>LEITURA DA SEMANA</small><h3>${esc(ins.title)}</h3><p>${esc(ins.text)}</p></div></section>
       <section class="pv8-panel pv8-weight"><div class="pv8-panel-head"><div><small>TENDÊNCIA</small><h3>Peso</h3></div><button type="button" onclick="closeModal(true);go('progress')">VER PROGRESSO</button></div>${miniWeight()}</section>
       <div class="pv8-section-title"><div><small>PLANEJAMENTO</small><h3>Organize os próximos dias</h3></div><span>toque no dia</span></div>
-      <div class="pv8-days">${rows.map(r=>`<section class="pv8-day ${r.date===iso()?'today':''} ${r.a.done?'done':''}" id="pv8-${r.date}"><button type="button" class="pv8-day-main" onclick="editPlannerDayV8('${r.date}')"><span class="pv8-date"><small>${dayLabel(r.d)}</small><b>${r.d.getDate()}</b></span><span class="pv8-day-body"><b>${r.date===iso()?'Hoje':r.a.done?'Realizado':'Planejamento'}</b><small>${esc(actualSummary(r.a))}</small><i>${planSummary(r.planned)}</i></span><span class="pv8-chevron">›</span></button><div class="pv8-day-edit" data-editor="${r.date}"><small>O que você pretende fazer?</small><div class="pv8-plan-chips">${editorChips(r.date,r.planned)}</div></div></section>`).join('')}</div>
+      <div class="pv8-days">${rows.map(r=>`<section class="pv8-day ${r.date===iso()?'today':''} ${r.a.done?'done':''}" id="pv8-${r.date}"><button type="button" class="pv8-day-main" onclick="editPlannerDayV8('${r.date}')"><span class="pv8-date"><small>${dayLabel(r.d)}</small><b>${r.d.getUTCDate()}</b></span><span class="pv8-day-body"><b>${r.date===iso()?'Hoje':r.a.done?'Realizado':'Planejamento'}</b><small>${esc(actualSummary(r.a))}</small><i>${planSummary(r.planned)}</i></span><span class="pv8-chevron">›</span></button><div class="pv8-day-edit" data-editor="${r.date}"><small>O que você pretende fazer?</small><div class="pv8-plan-chips">${editorChips(r.date,r.planned)}</div></div></section>`).join('')}</div>
       <button class="btn full pv8-save" onclick="savePlannerV8()">SALVAR MINHA SEMANA</button><p class="pv8-footnote">Planner+ organiza sua rotina e seus próprios registros. Não substitui avaliação ou prescrição individual.</p></div>`;
   }
 
@@ -820,3 +822,4 @@ if(!window.__VIDA_DEFER_BOOT)window.startVidaApp();
 
   window.__VIDA_SECURITY_VERSION='19.0.0';
 })();
+

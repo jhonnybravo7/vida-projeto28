@@ -1,10 +1,11 @@
-const CACHE='vida-nova-shell-v37';
+const CACHE='vida-nova-shell-v38';
 const CORE=[
   '/',
+  '/daily-rollover-v38.js?v=38',
   '/vida-v21.css?v=26',
   '/admin-v22.css?v=22',
   '/mobile-shell-v32.css?v=32',
-  '/vida-v21.js?v=26',
+  '/vida-v21.js?v=38',
   '/admin-v35.js?v=37',
   '/launch-stability-v26.js?v=26',
   '/device-handoff-v27.js?v=36',
@@ -61,4 +62,5 @@ self.addEventListener('fetch',event=>{
     })());
   }
 });
+
 
